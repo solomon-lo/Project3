@@ -42,31 +42,30 @@ private:
 class DirtPile : public ActorBaseClass
 {
 public:
-	DirtPile(int imageID = IID_DIRT, double startX, double startY, Direction dir = 90, int depth = 1, double size, StudentWorld* inputStudentWorld);
+	DirtPile(double startX, double startY, double size, StudentWorld* inputStudentWorld);
 
-	virtual void doSomething()
-	{}
+	virtual void doSomething();
 
 private:
 };
-//
-//class Socrates : public ActorBaseClass
-//{
-//public:
-//	Socrates(Direction dir = 180, int depth = 0, double size = 1.0);
-//
-//	void doSomething();
-//
-//	void setAsDead();
-//
-//	int Socrates::getHitPoints();
-//
-//	virtual bool getAliveStatus();
-//
-//private:
-//	int hitPoints;
-//	int numOfSprayCharges;
-//	int numOfFlameThrowerCharges;
-//
-//};
+
+class Socrates : public ActorBaseClass
+{
+public:
+	Socrates(int depth, double size, StudentWorld* inputStudentWorld);
+
+	void doSomething();
+
+	//void setAsDead();
+
+	int Socrates::getHitPoints();
+
+	//virtual bool getAliveStatus();
+
+private:
+	int hitPoints;
+	int numOfSprayCharges;
+	int numOfFlameThrowerCharges;
+
+};
 #endif // ACTOR_H_

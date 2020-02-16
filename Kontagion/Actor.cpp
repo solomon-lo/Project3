@@ -32,29 +32,30 @@ ActorBaseClass::~ActorBaseClass()
 ////////////////////////////
 
 
-DirtPile::DirtPile(int imageID, double startX, double startY, Direction dir, int depth, double size, StudentWorld* inputStudentWorld)
-	:ActorBaseClass(imageID,startX, startY, dir, depth, size, inputStudentWorld)
+DirtPile::DirtPile(double startX, double startY, double size, StudentWorld* inputStudentWorld)
+	:ActorBaseClass(IID_DIRT,startX, startY, 90, 1, size, inputStudentWorld)	//TODO: MAKE START RANDOM
 {}
 
 void DirtPile::doSomething()
 {}
 
 
-//Socrates::Socrates(Direction dir, int depth, double size)	//TODO: got rid of default parameters, unsure if we're supposed to
-//	: ActorBaseClass(IID_PLAYER, 0, 128, dir, depth, size)
-//{
-//	hitPoints = 100;
-//	numOfSprayCharges = 20;
-//	numOfFlameThrowerCharges = 5;
-//}
-//
-//int Socrates::getHitPoints()
-//{
-//	return hitPoints;
-//}
-//
-//void Socrates::doSomething()
-//{
-//
-//}
+Socrates::Socrates(int depth, double size, StudentWorld* inputStudentWorld)	//TODO: got rid of default parameters, unsure if we're supposed to
+	: ActorBaseClass(IID_PLAYER, 0, 128, 0, depth, size, inputStudentWorld)
+{
+	hitPoints = 100;
+	numOfSprayCharges = 20;
+	numOfFlameThrowerCharges = 5;
+}
+
+int Socrates::getHitPoints()
+{
+	return hitPoints;
+}
+ 
+
+void Socrates::doSomething()
+{
+
+}
 // Students:  Add code to this file, Actor.h, StudentWorld.h, and StudentWorld.cpp
