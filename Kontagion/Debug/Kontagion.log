@@ -1,2 +1,7 @@
 ﻿  Actor.cpp
-  Kontagion.vcxproj -> C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Debug\Kontagion.exe
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.h(45): error C2548: 'DirtPile::DirtPile': missing default argument for parameter 2
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.h(45): error C2548: 'DirtPile::DirtPile': missing default argument for parameter 3
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.h(45): error C2548: 'DirtPile::DirtPile': missing default argument for parameter 6
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.h(45): error C2548: 'DirtPile::DirtPile': missing default argument for parameter 7
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(40,1): error C2084: function 'void DirtPile::doSomething(void)' already has a body
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.h(47): message : see previous definition of 'doSomething'

@@ -30,11 +30,24 @@ public:
 
 	virtual StudentWorld* getStudentWorld();
 
+	virtual ~ActorBaseClass();
+
 private:
 
 	bool aliveStatus;
-	StudentWorld* m_gameWorld;
+	StudentWorld* m_StudentWorld;
 
+};
+
+class DirtPile : public ActorBaseClass
+{
+public:
+	DirtPile(int imageID = IID_DIRT, double startX, double startY, Direction dir = 90, int depth = 1, double size, StudentWorld* inputStudentWorld);
+
+	virtual void doSomething()
+	{}
+
+private:
 };
 //
 //class Socrates : public ActorBaseClass

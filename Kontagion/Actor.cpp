@@ -6,12 +6,8 @@ ActorBaseClass::ActorBaseClass(int imageID, double startX, double startY, Direct
 	:GraphObject(imageID, startX, startY, dir, depth, size)
 {
 	aliveStatus = true;
+	m_StudentWorld = inputStudentWorld;
 }
-
-
-
-
-
 bool ActorBaseClass::getAliveStatus()
 {
 	return aliveStatus;
@@ -24,9 +20,24 @@ void ActorBaseClass::setAsDead()
 
 StudentWorld* ActorBaseClass::getStudentWorld()
 {
-	return m_gameWorld;
+	return m_StudentWorld;
 }
 
+ActorBaseClass::~ActorBaseClass()
+{}
+
+
+////////////////////////////
+//DIRTPILE IMPLEMENTATIONS
+////////////////////////////
+
+
+DirtPile::DirtPile(int imageID, double startX, double startY, Direction dir, int depth, double size, StudentWorld* inputStudentWorld)
+	:ActorBaseClass(imageID,startX, startY, dir, depth, size, inputStudentWorld)
+{}
+
+void DirtPile::doSomething()
+{}
 
 
 //Socrates::Socrates(Direction dir, int depth, double size)	//TODO: got rid of default parameters, unsure if we're supposed to
