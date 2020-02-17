@@ -69,12 +69,18 @@ void Socrates::doSomething()
 	{
 		switch (ch)
 		{
+			//TODO: THIS IMPLEMENTATION IS INCORRECT
 		case KEY_PRESS_LEFT:
-			int currentX = getX();
-			int currentY = getY();
-			this->moveTo(currentX - 5, currentY);
+			this->moveTo(getX() - 5, getY());
+			this->setDirection(getDirection() - 5);
+		case KEY_PRESS_RIGHT:
+
+			this->moveTo(getX() + 5, getY());
+			this->setDirection(getDirection() + 5);
+		case KEY_PRESS_SPACE:
+			this->moveTo(getX() + 10, getY());
+			this->setDirection(getDirection() - 20);
 		}
 	}
-
 }
 // Students:  Add code to this file, Actor.h, StudentWorld.h, and StudentWorld.cpp
