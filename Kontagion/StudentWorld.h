@@ -1,11 +1,13 @@
 #ifndef STUDENTWORLD_H_
 #define STUDENTWORLD_H_
 
+#include "Actor.h"
 #include "GameWorld.h"
 #include "GraphObject.h"
 #include <iostream>
 #include <string>
 
+class Socrates;
 // Students:  Add code to this file, StudentWorld.cpp, Actor.h, and Actor.cpp
 
 //using Direction = int;
@@ -19,6 +21,7 @@ public:
     virtual void cleanUp();
 
 private:
+	Socrates* playerObject;
 };
 
 #endif // STUDENTWORLD_H_
