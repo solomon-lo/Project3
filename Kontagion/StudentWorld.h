@@ -8,6 +8,7 @@
 #include <string>
 
 class Socrates;
+class ActorBaseClass;
 // Students:  Add code to this file, StudentWorld.cpp, Actor.h, and Actor.cpp
 
 //using Direction = int;

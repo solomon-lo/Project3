@@ -43,7 +43,7 @@ private:
 class DirtPile : public ActorBaseClass
 {
 public:
-	DirtPile(double startX, double startY, double size, StudentWorld* inputStudentWorld);
+	DirtPile(int imageID, double startX, double startY, Direction dir, int depth, double size, StudentWorld* inputStudentWorld);
 
 	virtual void doSomething();
 

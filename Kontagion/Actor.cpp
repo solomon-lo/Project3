@@ -2,11 +2,13 @@
 #include "StudentWorld.h"
 using namespace std;
 
+class StudentWorld;
+
 ActorBaseClass::ActorBaseClass(int imageID, double startX, double startY, Direction dir, int depth, double size, StudentWorld* inputStudentWorld)
 	:GraphObject(imageID, startX, startY, dir, depth, size)
 {
 	aliveStatus = true;
-	m_StudentWorld = inputStudentWorld;
+	m_StudentWorld = inputStudentWorld;	
 }
 bool ActorBaseClass::getAliveStatus()
 {
@@ -32,8 +34,8 @@ ActorBaseClass::~ActorBaseClass()
 ////////////////////////////
 
 
-DirtPile::DirtPile(double startX, double startY, double size, StudentWorld* inputStudentWorld)
-	:ActorBaseClass(IID_DIRT,startX, startY, 90, 1, size, inputStudentWorld)	//TODO: MAKE START RANDOM
+DirtPile::DirtPile(int imageID, double startX, double startY, Direction dir, int depth, double size, StudentWorld* inputStudentWorld)
+	:ActorBaseClass(imageID, startX, startY, dir, depth, size, inputStudentWorld)
 {}
 
 void DirtPile::doSomething()
@@ -56,6 +58,23 @@ int Socrates::getHitPoints()
 
 void Socrates::doSomething()
 {
+
+	if (!getAliveStatus())
+	{
+		return;
+	}
+	int ch;
+	if (getStudentWorld()->getKey(ch))
+
+	{
+		switch (ch)
+		{
+		case KEY_PRESS_LEFT:
+			int currentX = getX();
+			int currentY = getY();
+			this->moveTo(currentX - 5, currentY);
+		}
+	}
 
 }
 // Students:  Add code to this file, Actor.h, StudentWorld.h, and StudentWorld.cpp
