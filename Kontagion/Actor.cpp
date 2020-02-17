@@ -34,7 +34,7 @@ ActorBaseClass::~ActorBaseClass()
 ////////////////////////////
 
 
-DirtPile::DirtPile(int imageID, double startX, double startY, Direction dir, int depth, double size, StudentWorld* inputStudentWorld)
+DirtPile::DirtPile(int imageID, double startX, double startY, StudentWorld* inputStudentWorld, Direction dir, int depth, double size)
 	:ActorBaseClass(imageID, startX, startY, dir, depth, size, inputStudentWorld)
 {}
 
@@ -65,21 +65,21 @@ void Socrates::doSomething()
 	}
 	int ch;
 	if (getStudentWorld()->getKey(ch))
-
 	{
-		switch (ch)
+		if (ch == KEY_PRESS_LEFT)
 		{
-			//TODO: THIS IMPLEMENTATION IS INCORRECT
-		case KEY_PRESS_LEFT:
-			this->moveTo(getX() - 5, getY());
-			this->setDirection(getDirection() - 5);
-		case KEY_PRESS_RIGHT:
+			int currentX = getX();
+			int currentY = getY();
+			setDirection(getDirection() + 5);
+			this->moveTo(currentX - 5, currentY);
+		}
+		if (ch == KEY_PRESS_RIGHT)
+		{
+			int currentX = getX();
+			int currentY = getY();
+			this->moveTo(currentX + 5, currentY);
 
-			this->moveTo(getX() + 5, getY());
-			this->setDirection(getDirection() + 5);
-		case KEY_PRESS_SPACE:
-			this->moveTo(getX() + 10, getY());
-			this->setDirection(getDirection() - 20);
+			setDirection(getDirection() + 5);
 		}
 	}
 }

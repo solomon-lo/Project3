@@ -4,6 +4,7 @@
 #include "Actor.h"
 #include "GameWorld.h"
 #include "GraphObject.h"
+#include <vector>
 #include <iostream>
 #include <string>
 
@@ -16,6 +17,7 @@ class ActorBaseClass;
 class StudentWorld : public GameWorld
 {
 public:
+	StudentWorld();
     StudentWorld(std::string assetPath);
     virtual int init();
     virtual int move();
@@ -23,6 +25,8 @@ public:
 
 private:
 	Socrates* playerObject;
+	std::vector<ActorBaseClass*> ActorsVector;
+
 };
 
 #endif // STUDENTWORLD_H_
