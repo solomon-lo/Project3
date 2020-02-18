@@ -57,6 +57,9 @@ public:
 
 	void doSomething();
 
+	int getPositionalAngle();
+
+	void changePositionalAngle(int change);
 	//void setAsDead();
 
 	int Socrates::getHitPoints();
@@ -67,6 +70,7 @@ private:
 	int hitPoints;
 	int numOfSprayCharges;
 	int numOfFlameThrowerCharges;
+	int positionalAngle;
 
 };
 #endif // ACTOR_H_
