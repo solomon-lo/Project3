@@ -22,6 +22,7 @@ public:
     virtual int init();
     virtual int move();
     virtual void cleanUp();
+	~StudentWorld();
 
 private:
 	Socrates* playerObject;

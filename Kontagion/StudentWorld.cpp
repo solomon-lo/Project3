@@ -59,4 +59,14 @@ void StudentWorld::cleanUp()
 {
 	delete playerObject;
 	vector<ActorBaseClass*>::iterator it;
+	for (it = ActorsVector.begin(); it != ActorsVector.end(); it++)
+	{
+		delete* it;
+	}
+	ActorsVector.clear();
+}
+
+StudentWorld::~StudentWorld()
+{
+	this->cleanUp;
 }
