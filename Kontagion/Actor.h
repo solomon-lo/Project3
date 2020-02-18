@@ -43,7 +43,7 @@ private:
 class DirtPile : public ActorBaseClass
 {
 public:
-	DirtPile(int imageID, double startX, double startY, StudentWorld* inputStudentWorld, Direction dir = 90, int depth = 0, double size = 1);
+	DirtPile(double startX, double startY, StudentWorld* inputStudentWorld, double size, int imageID = IID_DIRT, Direction dir = 0, int depth = 1);
 
 	virtual void doSomething();
 
@@ -53,7 +53,7 @@ private:
 class Socrates : public ActorBaseClass
 {
 public:
-	Socrates(int depth, double size, StudentWorld* inputStudentWorld);
+	Socrates(double size, StudentWorld* inputStudentWorld, int imageID = IID_PLAYER, Direction dir = 0, double startX = 0, double startY = 128, int depth = 0);
 
 	void doSomething();
 

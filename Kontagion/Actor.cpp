@@ -32,19 +32,11 @@ ActorBaseClass::~ActorBaseClass()
 
 
 ////////////////////////////
-//DIRTPILE IMPLEMENTATIONS
+//SOCRATES IMPLEMENTATIONS
 ////////////////////////////
 
 
-DirtPile::DirtPile(int imageID, double startX, double startY, StudentWorld* inputStudentWorld, Direction dir, int depth, double size)
-	:ActorBaseClass(imageID, startX, startY, dir, depth, size, inputStudentWorld)
-{}
-
-void DirtPile::doSomething()
-{}
-
-
-Socrates::Socrates(int depth, double size, StudentWorld* inputStudentWorld)	//TODO: got rid of default parameters, unsure if we're supposed to
+Socrates::Socrates(double size, StudentWorld* inputStudentWorld, int imageID, Direction dir, double startX, double startY, int depth)
 	: ActorBaseClass(IID_PLAYER, 0, 128, 0, 0, size, inputStudentWorld)
 {
 	hitPoints = 100;
@@ -68,7 +60,7 @@ int Socrates::getHitPoints()
 {
 	return hitPoints;
 }
- 
+
 
 void Socrates::doSomething()
 {
@@ -84,7 +76,7 @@ void Socrates::doSomething()
 		{
 
 			const double PI = 4 * atan(1);
-			double newX = 128 + ( 128 * cos((getPositionalAngle() + 5) * 1.0 / 360 * 2 * PI));
+			double newX = 128 + (128 * cos((getPositionalAngle() + 5) * 1.0 / 360 * 2 * PI));
 			cerr << "getpositionalnagle is" << getPositionalAngle() << endl;
 			cerr << "newX is" << newX << endl;
 			double newY = 128 + (128 * sin((getPositionalAngle() + 5) * 1.0 / 360 * 2 * PI));
@@ -116,4 +108,18 @@ void Socrates::doSomething()
 		}
 	}
 }
+
+////////////////////////////
+//DIRTPILE IMPLEMENTATIONS
+////////////////////////////
+
+
+DirtPile::DirtPile(double startX, double startY, StudentWorld* inputStudentWorld, double size, int imageID, Direction dir, int depth)
+	:ActorBaseClass(imageID, startX, startY, dir, depth, size, inputStudentWorld)
+{}
+
+void DirtPile::doSomething()
+{}
+
+
 // Students:  Add code to this file, Actor.h, StudentWorld.h, and StudentWorld.cpp

@@ -16,9 +16,7 @@ GameWorld* createStudentWorld(string assetPath)
 
 StudentWorld::StudentWorld(string assetPath)
 : GameWorld(assetPath)
-{
-
-}
+{}
 
 int StudentWorld::init()
 {
@@ -33,10 +31,10 @@ int StudentWorld::init()
 			randomX = randInt((VIEW_WIDTH / 2) - 120, (VIEW_WIDTH / 2) + 120);
 			randomY = randInt((VIEW_HEIGHT / 2) - 120, (VIEW_HEIGHT / 2) + 120);
 		}
-		DirtPile* newDirtPile = new DirtPile(IID_DIRT, randomX, randomY, this, 0, 1, 1);
+		DirtPile* newDirtPile = new DirtPile(randomX, randomY, this, 1);
 		ActorsVector.push_back(newDirtPile);
 	}
-	playerObject = new Socrates(0, 1, this);
+	playerObject = new Socrates(1, this);
     return GWSTATUS_CONTINUE_GAME;
 }
 
@@ -68,5 +66,5 @@ void StudentWorld::cleanUp()
 
 StudentWorld::~StudentWorld()
 {
-	this->cleanUp;
+	this->cleanUp();
 }
