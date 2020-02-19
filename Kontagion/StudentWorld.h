@@ -17,7 +17,6 @@ class ActorBaseClass;
 class StudentWorld : public GameWorld
 {
 public:
-	StudentWorld();
     StudentWorld(std::string assetPath);
     virtual int init();
     virtual int move();

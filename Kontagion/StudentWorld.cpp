@@ -1,4 +1,4 @@
-
+//i think this is project3_draft1 save, not accidental skeleton.zip opened save
 #include "StudentWorld.h"
 #include "GameConstants.h"
 #include <string>
@@ -31,10 +31,10 @@ int StudentWorld::init()
 			randomX = randInt((VIEW_WIDTH / 2) - 120, (VIEW_WIDTH / 2) + 120);
 			randomY = randInt((VIEW_HEIGHT / 2) - 120, (VIEW_HEIGHT / 2) + 120);
 		}
-		DirtPile* newDirtPile = new DirtPile(randomX, randomY, this, 1);
+		DirtPile* newDirtPile = new DirtPile(randomX, randomY, this);
 		ActorsVector.push_back(newDirtPile);
 	}
-	playerObject = new Socrates(1, this);
+	playerObject = new Socrates(this);
     return GWSTATUS_CONTINUE_GAME;
 }
 

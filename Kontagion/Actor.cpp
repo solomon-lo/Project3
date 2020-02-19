@@ -6,8 +6,8 @@ using namespace std;
 
 class StudentWorld;
 
-ActorBaseClass::ActorBaseClass(int imageID, double startX, double startY, Direction dir, int depth, double size, StudentWorld* inputStudentWorld)
-	:GraphObject(imageID, startX, startY, dir, depth, size)
+ActorBaseClass::ActorBaseClass(int imageID, double startX, double startY, Direction dir, int depth, StudentWorld* inputStudentWorld)
+	:GraphObject(imageID, startX, startY, dir, depth)
 {
 	aliveStatus = true;
 	m_StudentWorld = inputStudentWorld;	
@@ -36,8 +36,8 @@ ActorBaseClass::~ActorBaseClass()
 ////////////////////////////
 
 
-Socrates::Socrates(double size, StudentWorld* inputStudentWorld, int imageID, Direction dir, double startX, double startY, int depth)
-	: ActorBaseClass(IID_PLAYER, 0, 128, 0, 0, size, inputStudentWorld)
+Socrates::Socrates( StudentWorld* inputStudentWorld, int imageID, Direction dir, double startX, double startY, int depth)
+	: ActorBaseClass(IID_PLAYER, 0, 128, 0, 0, inputStudentWorld)
 {
 	hitPoints = 100;
 	numOfSprayCharges = 20;
@@ -56,10 +56,10 @@ void Socrates::changePositionalAngle(int change)
 	positionalAngle = positionalAngle % 360;
 }
 
-int Socrates::getHitPoints()
-{
-	return hitPoints;
-}
+//int Socrates::getHitPoints()
+//{
+//	return hitPoints;
+//}
 
 
 void Socrates::doSomething()
@@ -76,10 +76,10 @@ void Socrates::doSomething()
 		{
 
 			const double PI = 4 * atan(1);
-			double newX = 128 + (128 * cos((getPositionalAngle() + 5) * 1.0 / 360 * 2 * PI));
+			double newX = 128 + (128 * cos((getPositionalAngle() + 5.000000000) * 1.0 / 360 * 2 * PI));
 			cerr << "getpositionalnagle is" << getPositionalAngle() << endl;
 			cerr << "newX is" << newX << endl;
-			double newY = 128 + (128 * sin((getPositionalAngle() + 5) * 1.0 / 360 * 2 * PI));
+			double newY = 128 + (128 * sin((getPositionalAngle() + 5.000000000) * 1.0 / 360 * 2 * PI));
 			cerr << "newY is" << newY << endl;
 			moveTo(newX, newY);
 			changePositionalAngle(5);
@@ -96,10 +96,10 @@ void Socrates::doSomething()
 		if (ch == KEY_PRESS_RIGHT)
 		{
 			const double PI = 4 * atan(1);
-			double newX = 128 + (128 * cos((getPositionalAngle() - 5) * 1.0 / 360 * 2 * PI));
+			double newX = 128 + (128 * cos((getPositionalAngle() - 5.00000) * 1.0 / 360 * 2 * PI));
 			cerr << "getpositionalnagle is" << getPositionalAngle() << endl;
 			cerr << "newX is" << newX << endl;
-			double newY = 128 + (128 * sin((getPositionalAngle() - 5) * 1.0 / 360 * 2 * PI));
+			double newY = 128 + (128 * sin((getPositionalAngle() - 5.00000) * 1.0 / 360 * 2 * PI));
 			cerr << "newY is" << newY << endl;
 			moveTo(newX, newY);
 			changePositionalAngle(-5);
@@ -114,8 +114,8 @@ void Socrates::doSomething()
 ////////////////////////////
 
 
-DirtPile::DirtPile(double startX, double startY, StudentWorld* inputStudentWorld, double size, int imageID, Direction dir, int depth)
-	:ActorBaseClass(imageID, startX, startY, dir, depth, size, inputStudentWorld)
+DirtPile::DirtPile(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth)
+	:ActorBaseClass(imageID, startX, startY, dir, depth, inputStudentWorld)
 {}
 
 void DirtPile::doSomething()

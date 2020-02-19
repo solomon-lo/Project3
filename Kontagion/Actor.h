@@ -10,7 +10,7 @@ class ActorBaseClass : public GraphObject
 {
 public:
 	//constructor
-	ActorBaseClass(int imageID, double startX, double startY, Direction dir, int depth, double size, StudentWorld* inputStudentWorld);
+	ActorBaseClass(int imageID, double startX, double startY, Direction dir, int depth, StudentWorld* inputStudentWorld);
 
 	//Not sure if we have to implement these virtual functions from GraphObject
 	////virtual function to move, MUST HAVE
@@ -43,7 +43,7 @@ private:
 class DirtPile : public ActorBaseClass
 {
 public:
-	DirtPile(double startX, double startY, StudentWorld* inputStudentWorld, double size, int imageID = IID_DIRT, Direction dir = 0, int depth = 1);
+	DirtPile(double startX, double startY, StudentWorld* inputStudentWorld, int imageID = IID_DIRT, Direction dir = 0, int depth = 1);
 
 	virtual void doSomething();
 
@@ -53,7 +53,7 @@ private:
 class Socrates : public ActorBaseClass
 {
 public:
-	Socrates(double size, StudentWorld* inputStudentWorld, int imageID = IID_PLAYER, Direction dir = 0, double startX = 0, double startY = 128, int depth = 0);
+	Socrates(StudentWorld* inputStudentWorld, int imageID = IID_PLAYER, Direction dir = 0, double startX = 0, double startY = 128, int depth = 0);
 
 	void doSomething();
 
@@ -62,7 +62,7 @@ public:
 	void changePositionalAngle(int change);
 	//void setAsDead();
 
-	int Socrates::getHitPoints();
+	//int Socrates::getHitPoints();
 
 	//virtual bool getAliveStatus();
 
