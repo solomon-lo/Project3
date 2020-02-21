@@ -23,6 +23,8 @@ public:
     virtual void cleanUp();
 	~StudentWorld();
 
+	void removeDeadActors();
+
 private:
 	Socrates* playerObject;
 	std::vector<ActorBaseClass*> ActorsVector;

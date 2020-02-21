@@ -16,10 +16,12 @@ GameWorld* createStudentWorld(string assetPath)
 
 StudentWorld::StudentWorld(string assetPath)
 : GameWorld(assetPath)
-{}
+{
+}
 
 int StudentWorld::init()
 {
+	//init dirtPiles
 	int numOfDirtPiles = max(180 - 20 * getLevel(), 20);
 	for (int i = 0; i < numOfDirtPiles; i++)
 	{
@@ -34,7 +36,11 @@ int StudentWorld::init()
 		DirtPile* newDirtPile = new DirtPile(randomX, randomY, this);
 		ActorsVector.push_back(newDirtPile);
 	}
+
+	//init Socrates
 	playerObject = new Socrates(this);
+
+	//init food items
     return GWSTATUS_CONTINUE_GAME;
 }
 
@@ -50,8 +56,28 @@ int StudentWorld::move()
 	{
 		(*it)->doSomething();
 	}
+
     return GWSTATUS_CONTINUE_GAME;
 }
+
+void StudentWorld::removeDeadActors()
+{
+	vector<ActorBaseClass*>::iterator it;
+	for (it = ActorsVector.begin(); it != ActorsVector.end(); )
+	{
+		if ((*it)->getAliveStatus() == false)
+		{
+			delete* it;
+			it = ActorsVector.erase(it);
+
+		}
+		else
+		{
+			it++;
+		}
+	}
+}
+
 
 void StudentWorld::cleanUp()
 {

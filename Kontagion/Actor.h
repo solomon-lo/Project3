@@ -6,11 +6,17 @@
 class StudentWorld;
 
 // Students:  Add code to this file, Actor.cpp, StudentWorld.h, and StudentWorld.cpp
+
+//class ProjectilesBaseClass : public ActorBaseClass
+//{
+//public:
+//	ProjectilesBaseClass(int imageID, double startX, double startY, Direction dir, int depth, StudentWorld* inputStudentWorld);
+//};
 class ActorBaseClass : public GraphObject
 {
 public:
 	//constructor
-	ActorBaseClass(int imageID, double startX, double startY, Direction dir, int depth, StudentWorld* inputStudentWorld);
+	ActorBaseClass(int imageID, double startX, double startY, Direction dir, int depth, StudentWorld* inputStudentWorld, int inputHP = 1);
 
 	//Not sure if we have to implement these virtual functions from GraphObject
 	////virtual function to move, MUST HAVE
@@ -33,11 +39,17 @@ public:
 
 	virtual ~ActorBaseClass();
 
+	virtual int getHP();
+
+	virtual void modifyHP(int modifyAmount);
+
+
+
 private:
 
 	bool aliveStatus;
 	StudentWorld* m_StudentWorld;
-
+	int HP;
 };
 
 class DirtPile : public ActorBaseClass
@@ -60,11 +72,6 @@ public:
 	int getPositionalAngle();
 
 	void changePositionalAngle(int change);
-	//void setAsDead();
-
-	//int Socrates::getHitPoints();
-
-	//virtual bool getAliveStatus();
 
 private:
 	int hitPoints;
@@ -72,5 +79,16 @@ private:
 	int numOfFlameThrowerCharges;
 	int positionalAngle;
 
+};
+
+class SprayProjectile : public ActorBaseClass
+{
+public:
+	SprayProjectile(double startX, double startY, StudentWorld* inputStudentWorld, int imageID = IID_SPRAY, Direction dir = 0, int depth = 1, int inputHP = 1);
+
+	void doSomething();
+
+private:
+	int distanceTraveled;
 };
 #endif // ACTOR_H_
