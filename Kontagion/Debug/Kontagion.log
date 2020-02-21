@@ -1,4 +1,3 @@
 ﻿  Actor.cpp
-  StudentWorld.cpp
-  Generating Code...
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(36,9): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
   Kontagion.vcxproj -> C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Debug\Kontagion.exe

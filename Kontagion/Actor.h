@@ -49,7 +49,7 @@ private:
 
 	bool aliveStatus;
 	StudentWorld* m_StudentWorld;
-	int HP;
+	double HP;
 };
 
 class DirtPile : public ActorBaseClass
@@ -74,8 +74,7 @@ public:
 	void changePositionalAngle(int change);
 
 private:
-	int hitPoints;
-	int numOfSprayCharges;
+	int numOfSprayProjectiles;
 	int numOfFlameThrowerCharges;
 	int positionalAngle;
 

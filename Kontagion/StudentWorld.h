@@ -22,7 +22,10 @@ public:
     virtual int move();
     virtual void cleanUp();
 	~StudentWorld();
+	void addToActorsVector(ActorBaseClass* actorToAdd);
+	Socrates* getPlayerObject();
 
+	//helper functions
 	void removeDeadActors();
 
 private:

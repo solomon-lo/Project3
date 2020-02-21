@@ -51,7 +51,7 @@ void ActorBaseClass::modifyHP(int modifyAmount)
 Socrates::Socrates( StudentWorld* inputStudentWorld, int imageID, Direction dir, double startX, double startY, int depth)
 	: ActorBaseClass(IID_PLAYER, 0, 128, 0, 0, inputStudentWorld, 100)
 {
-	numOfSprayCharges = 20;
+	numOfSprayProjectiles = 20;
 	numOfFlameThrowerCharges = 5;
 	positionalAngle = 180;
 }
@@ -116,8 +116,22 @@ void Socrates::doSomething()
 
 		if (ch == KEY_PRESS_SPACE)
 		{
+			if (numOfSprayProjectiles > 0)
+			{
+				double shotXDirection = 0;
+				double shotYDirection = 0;
+				getPositionInThisDirection(getDirection(), SPRITE_RADIUS * 2, shotXDirection, shotYDirection);
+				SprayProjectile* shotSpray = new SprayProjectile(shotXDirection, shotYDirection,getStudentWorld() , 4, getDirection(), 1, 1);
+				numOfSprayProjectiles--;
+				getStudentWorld()->addToActorsVector(shotSpray);
+				getStudentWorld()->playSound(SOUND_PLAYER_SPRAY);
+			}
 
 		}
+	}
+	else
+	{
+
 	}
 }
 

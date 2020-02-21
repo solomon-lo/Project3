@@ -42,6 +42,7 @@ int StudentWorld::init()
 
 	//init food items
     return GWSTATUS_CONTINUE_GAME;
+
 }
 
 int StudentWorld::move()
@@ -56,6 +57,11 @@ int StudentWorld::move()
 	{
 		(*it)->doSomething();
 	}
+
+	removeDeadActors();
+
+
+	setGameStatText("hello world");
 
     return GWSTATUS_CONTINUE_GAME;
 }
@@ -90,7 +96,16 @@ void StudentWorld::cleanUp()
 	ActorsVector.clear();
 }
 
+void StudentWorld::addToActorsVector(ActorBaseClass* actorToAdd)
+{
+	ActorsVector.push_back(actorToAdd);
+}
 StudentWorld::~StudentWorld()
 {
 	this->cleanUp();
+}
+
+Socrates* StudentWorld::getPlayerObject()
+{
+	return playerObject;
 }
