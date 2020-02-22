@@ -1,3 +1,4 @@
-﻿  Actor.cpp
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(36,9): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
+﻿  StudentWorld.cpp
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\StudentWorld.cpp(105,13): warning C4244: 'return': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\StudentWorld.cpp(120): warning C4715: 'StudentWorld::getOverlappedActorPointer': not all control paths return a value
   Kontagion.vcxproj -> C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Debug\Kontagion.exe

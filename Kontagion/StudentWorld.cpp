@@ -59,7 +59,7 @@ int StudentWorld::move()
 	removeDeadActors();
 
 
-	setGameStatText("Lives: " + to_string(getScore()) + " Level: " + to_string(getLevel()) + " Lives: " + to_string(getLives())+ " Sprays: " + to_string(getPlayerObjectSpraysLeft()) + " Flames: " + to_string(getPlayerObjectFlamesLeft()));
+	setGameStatText("Score: " + to_string(getScore()) + " Level: " + to_string(getLevel()) + " Lives: " + to_string(getLives())+ " Health: " + to_string(getLives()) + " Sprays: " + to_string(getPlayerObjectSpraysLeft()) + " Flames: " + to_string(getPlayerObjectFlamesLeft()));
 
     return GWSTATUS_CONTINUE_GAME;
 }

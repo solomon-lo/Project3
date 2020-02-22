@@ -41,6 +41,11 @@ void ActorBaseClass::modifyHP(int modifyAmount)
 	HP += modifyAmount;
 }
 
+bool ActorBaseClass::sprayWillHarm()
+{
+	return false;
+}
+
 
 
 ////////////////////////////
@@ -161,7 +166,6 @@ void DirtPile::doSomething()
 
 bool DirtPile::sprayWillHarm()
 {
-	cerr << "Dirtpile hit at: " << getX() << "and " << getY();
 	return true;
 }
 
@@ -179,14 +183,28 @@ SprayProjectile::SprayProjectile(double startX, double startY, StudentWorld* inp
 void SprayProjectile::doSomething()
 {
 	//TODO:CHECK FOR OVERLAP
-
-	//otherwise part(bullet point 3)
+	if (getHP() < 0)
+	{
+		setAsDead();
+	}
+	ActorBaseClass* temp = getStudentWorld()->getOverlappedActorPointer(this);
+	if (temp != nullptr)
+	{
+		if (temp->sprayWillHarm() == true)
+		{
+			temp->setAsDead();
+			this->setAsDead();
+		}
+	}
 	moveAngle(getDirection(), SPRITE_RADIUS * 2);
 	distanceTraveled += SPRITE_RADIUS * 2;
+	//otherwise part(bullet point 3)
 
 	if (distanceTraveled >= 112)
 	{
 		setAsDead();
 	}
+
+
 }
 // Students:  Add code to this file, Actor.h, StudentWorld.h, and StudentWorld.cpp
