@@ -67,7 +67,15 @@ void Socrates::changePositionalAngle(int change)
 	positionalAngle = positionalAngle % 360;
 }
 
+int Socrates::getNumOfSprayProjectiles()
+{
+	return numOfSprayProjectiles;
+}
 
+int Socrates::getNumOfFlameThrowerCharges()
+{
+	return numOfFlameThrowerCharges;
+}
 
 void Socrates::doSomething()
 {
@@ -131,7 +139,10 @@ void Socrates::doSomething()
 	}
 	else
 	{
-
+		if (numOfSprayProjectiles < 20)
+		{
+			numOfSprayProjectiles++;
+		}
 	}
 }
 
@@ -147,6 +158,13 @@ DirtPile::DirtPile(double startX, double startY, StudentWorld* inputStudentWorld
 void DirtPile::doSomething()
 {}
 
+
+bool DirtPile::sprayWillHarm()
+{
+	cerr << "Dirtpile hit at: " << getX() << "and " << getY();
+	return true;
+}
+
 ////////////////////////////
 //SPRAY IMPLEMENTATIONS
 ////////////////////////////
@@ -157,6 +175,7 @@ SprayProjectile::SprayProjectile(double startX, double startY, StudentWorld* inp
 	distanceTraveled = 0;
 }
 
+
 void SprayProjectile::doSomething()
 {
 	//TODO:CHECK FOR OVERLAP
@@ -164,6 +183,7 @@ void SprayProjectile::doSomething()
 	//otherwise part(bullet point 3)
 	moveAngle(getDirection(), SPRITE_RADIUS * 2);
 	distanceTraveled += SPRITE_RADIUS * 2;
+
 	if (distanceTraveled >= 112)
 	{
 		setAsDead();

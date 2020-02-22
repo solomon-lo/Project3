@@ -49,8 +49,6 @@ int StudentWorld::move()
 {
     // This code is here merely to allow the game to build, run, and terminate after you hit enter.
     // Notice that the return value GWSTATUS_PLAYER_DIED will cause our framework to end the current level.
- 
-	decLives();
 	playerObject->doSomething();
 	vector<ActorBaseClass*>::iterator it;
 	for (it = ActorsVector.begin(); it != ActorsVector.end(); it++)
@@ -61,11 +59,25 @@ int StudentWorld::move()
 	removeDeadActors();
 
 
-	setGameStatText("hello world");
+	setGameStatText("Lives: " + to_string(getScore()) + " Level: " + to_string(getLevel()) + " Lives: " + to_string(getLives())+ " Sprays: " + to_string(getPlayerObjectSpraysLeft()) + " Flames: " + to_string(getPlayerObjectFlamesLeft()));
 
     return GWSTATUS_CONTINUE_GAME;
 }
 
+int StudentWorld::getPlayerObjectHealth()
+{
+	return getPlayerObject()->getHP();
+}
+
+int StudentWorld::getPlayerObjectSpraysLeft()
+{
+	return getPlayerObject()->getNumOfSprayProjectiles();
+}
+
+int StudentWorld::getPlayerObjectFlamesLeft()
+{
+	return getPlayerObject()->getNumOfFlameThrowerCharges();
+}
 void StudentWorld::removeDeadActors()
 {
 	vector<ActorBaseClass*>::iterator it;
@@ -80,6 +92,29 @@ void StudentWorld::removeDeadActors()
 		else
 		{
 			it++;
+		}
+	}
+}
+
+
+int StudentWorld::getEuclideanDistance(double baseX, double baseY, double newX, double newY)
+{
+	double difX = abs((newX - baseX));
+	double difY = abs((newY - baseY));
+	double toSqrt = ((difX * difX) + (difY * difY));
+	return sqrt(toSqrt);
+}
+
+ActorBaseClass* StudentWorld::getOverlappedActorPointer(ActorBaseClass* centerActor)
+{
+	vector<ActorBaseClass*>::iterator it;
+	for (it = ActorsVector.begin(); it != ActorsVector.end(); it++)
+	{
+
+		int distanceToCenterActor = getEuclideanDistance(centerActor->getX(), centerActor->getY(), (*it)->getX(), (*it)->getY());
+		if (distanceToCenterActor <= 8)
+		{
+			return *it;
 		}
 	}
 }
@@ -100,6 +135,7 @@ void StudentWorld::addToActorsVector(ActorBaseClass* actorToAdd)
 {
 	ActorsVector.push_back(actorToAdd);
 }
+
 StudentWorld::~StudentWorld()
 {
 	this->cleanUp();

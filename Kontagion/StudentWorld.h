@@ -24,10 +24,15 @@ public:
 	~StudentWorld();
 	void addToActorsVector(ActorBaseClass* actorToAdd);
 	Socrates* getPlayerObject();
+	ActorBaseClass* getOverlappedActorPointer(ActorBaseClass* centerActor);
 
 	//helper functions
 	void removeDeadActors();
-
+	int getPlayerObjectHealth();
+	int getPlayerObjectSpraysLeft();
+	int getPlayerObjectFlamesLeft();
+	int getEuclideanDistance(double baseX, double baseY, double newX, double newY);
+	
 private:
 	Socrates* playerObject;
 	std::vector<ActorBaseClass*> ActorsVector;

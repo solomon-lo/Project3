@@ -42,6 +42,8 @@ public:
 	virtual int getHP();
 
 	virtual void modifyHP(int modifyAmount);
+	
+	virtual bool sprayWillHarm();
 
 
 
@@ -59,6 +61,8 @@ public:
 
 	virtual void doSomething();
 
+	virtual bool sprayWillHarm();
+
 private:
 };
 
@@ -72,6 +76,12 @@ public:
 	int getPositionalAngle();
 
 	void changePositionalAngle(int change);
+
+	int getNumOfSprayProjectiles();
+
+	int getNumOfFlameThrowerCharges();
+
+	
 
 private:
 	int numOfSprayProjectiles;
