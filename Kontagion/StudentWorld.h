@@ -37,6 +37,8 @@ public:
 	double getEuclideanDistance(double baseX, double baseY, double newX, double newY);
 	double getDistanceFromSocrates(ActorBaseClass* targetActor);
 	void makeSocratesFullHP();
+	void flameThrowerGoodieEffect();
+	void fungusEffect();
 	
 private:
 	Socrates* playerObject;

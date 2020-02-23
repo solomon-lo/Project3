@@ -45,6 +45,12 @@ int StudentWorld::init()
 	//cerr << "newX is" << newX << endl;
 	double goodieY = (VIEW_HEIGHT / 2) + (128 * sin(175 * 1.0 / 360 * 2 * PI));
 	ActorsVector.push_back(new RestoreHealthGoodie(goodieX, goodieY, this));
+
+	double flameX = (VIEW_WIDTH / 2) + (128 * cos(160 * 1.0 / 360 * 2 * PI));
+	//cerr << "getpositionalnagle is" << getPositionalAngle() << endl;
+	//cerr << "newX is" << newX << endl;
+	double flameY = (VIEW_HEIGHT / 2) + (128 * sin(160 * 1.0 / 360 * 2 * PI));
+	ActorsVector.push_back(new FlameThrowerGoodie(flameX, flameY, this));
 	//init Socrates
 	playerObject = new Socrates(this);
 
@@ -121,6 +127,16 @@ void StudentWorld::makeSocratesFullHP()
 {
 	int currentHP = playerObject->getHP();
 	playerObject->modifyHP(100 - currentHP);
+}
+
+void StudentWorld::flameThrowerGoodieEffect()
+{
+	playerObject->modifyNumOfFlameThrowerCharges(5);
+}
+
+void StudentWorld::fungusEffect()
+{
+	playerObject->modifyHP(-20);
 }
 bool StudentWorld::wentOverSprayableObject(int centerActorX, int centerActorY)
 {

@@ -97,6 +97,11 @@ int Socrates::getNumOfFlameThrowerCharges()
 	return numOfFlameThrowerCharges;
 }
 
+void Socrates::modifyNumOfFlameThrowerCharges(int changeAmount)
+{
+	numOfFlameThrowerCharges += changeAmount;
+}
+
 void Socrates::restoreSocratesFullHP()
 {
 	modifyHP(100 - getHP());
@@ -306,7 +311,7 @@ bool GoodieBaseClass::checkAliveAndIfOverlapWithSocrates()
 	return false;
 }
 
-void GoodieBaseClass::actionsIfOverlapWithSocrates(int pointsChange)
+void GoodieBaseClass::baseActionsIfOverlapWithSocrates(int pointsChange)
 {
 
 	StudentWorld* currentStudentWorldPointer = getStudentWorld();
@@ -325,6 +330,17 @@ void GoodieBaseClass::trackAndDieIfExceedLifeTimeThenIncTick()
 	lifetimeTicksTracker++;
 }
 
+
+bool GoodieBaseClass::sprayWillHarm()
+{
+	return true;
+}
+
+bool GoodieBaseClass::flameWillHarm()
+{
+	return true;
+}
+
 RestoreHealthGoodie::RestoreHealthGoodie(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth)
 	:GoodieBaseClass(startX, startY, inputStudentWorld, imageID, dir, depth)
 {}
@@ -334,9 +350,63 @@ void RestoreHealthGoodie::doSomething()
 	if (checkAliveAndIfOverlapWithSocrates())
 	{
 		//cerr << "overlppaed with soc and goodie" << endl;
-		actionsIfOverlapWithSocrates(250);
+		baseActionsIfOverlapWithSocrates(250);
 
 		getStudentWorld()->makeSocratesFullHP();
+		return;
+	}
+
+	trackAndDieIfExceedLifeTimeThenIncTick();
+}
+
+FlameThrowerGoodie::FlameThrowerGoodie(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth)
+	:GoodieBaseClass(startX, startY, inputStudentWorld, imageID, dir, depth)
+{}
+
+void FlameThrowerGoodie::doSomething()
+{
+	if (checkAliveAndIfOverlapWithSocrates())
+	{
+		//cerr << "overlppaed with soc and goodie" << endl;
+		baseActionsIfOverlapWithSocrates(300);
+
+		getStudentWorld()->flameThrowerGoodieEffect();
+		return;
+	}
+
+	trackAndDieIfExceedLifeTimeThenIncTick();
+}
+
+ExtraLifeGoodie::ExtraLifeGoodie(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth)
+	:GoodieBaseClass(startX, startY, inputStudentWorld, imageID, dir, depth)
+{}
+
+void ExtraLifeGoodie::doSomething()
+{
+	if (checkAliveAndIfOverlapWithSocrates())
+	{
+		//cerr << "overlppaed with soc and goodie" << endl;
+		baseActionsIfOverlapWithSocrates(500);
+
+		getStudentWorld()->incLives();
+		return;
+	}
+
+	trackAndDieIfExceedLifeTimeThenIncTick();
+}
+
+Fungus::Fungus(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth)
+	:GoodieBaseClass(startX, startY, inputStudentWorld, imageID, dir, depth)
+{}
+
+void Fungus::doSomething()
+{
+	if (checkAliveAndIfOverlapWithSocrates())
+	{
+		//cerr << "overlppaed with soc and goodie" << endl;
+		baseActionsIfOverlapWithSocrates(-50);
+
+		getStudentWorld()->fungusEffect();
 		return;
 	}
 

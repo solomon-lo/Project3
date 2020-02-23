@@ -83,6 +83,8 @@ public:
 
 	int getNumOfFlameThrowerCharges();
 
+	void modifyNumOfFlameThrowerCharges(int changeAmount);
+
 	virtual void restoreSocratesFullHP();
 
 	
@@ -124,8 +126,11 @@ public:
 
 	virtual bool checkAliveAndIfOverlapWithSocrates();
 
-	virtual void actionsIfOverlapWithSocrates(int pointsChange);
+	virtual void baseActionsIfOverlapWithSocrates(int pointsChange);
 	virtual void trackAndDieIfExceedLifeTimeThenIncTick();
+
+	bool sprayWillHarm();
+	bool flameWillHarm();
 
 
 
@@ -141,7 +146,32 @@ public:
 	RestoreHealthGoodie(double startX, double startY, StudentWorld* inputStudentWorld, int imageID = IID_RESTORE_HEALTH_GOODIE, Direction dir = 0, int depth = 1);
 
 	void doSomething();
+};
 
-private:
+class FlameThrowerGoodie : public GoodieBaseClass
+{
+public:
+
+	FlameThrowerGoodie(double startX, double startY, StudentWorld* inputStudentWorld, int imageID = IID_FLAME_THROWER_GOODIE, Direction dir = 0, int depth = 1);
+
+	void doSomething();
+};
+
+class ExtraLifeGoodie : public GoodieBaseClass
+{
+public:
+
+	ExtraLifeGoodie(double startX, double startY, StudentWorld* inputStudentWorld, int imageID = IID_EXTRA_LIFE_GOODIE, Direction dir = 0, int depth = 1);
+
+	void doSomething();
+};
+
+class Fungus : public GoodieBaseClass
+{
+public:
+
+	Fungus(double startX, double startY, StudentWorld* inputStudentWorld, int imageID = IID_FUNGUS, Direction dir = 0, int depth = 1);
+
+	void doSomething();
 };
 #endif // ACTOR_H_
