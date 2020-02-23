@@ -7,11 +7,6 @@ class StudentWorld;
 
 // Students:  Add code to this file, Actor.cpp, StudentWorld.h, and StudentWorld.cpp
 
-//class ProjectilesBaseClass : public ActorBaseClass
-//{
-//public:
-//	ProjectilesBaseClass(int imageID, double startX, double startY, Direction dir, int depth, StudentWorld* inputStudentWorld);
-//};
 class ActorBaseClass : public GraphObject
 {
 public:
@@ -39,11 +34,13 @@ public:
 
 	virtual ~ActorBaseClass();
 
-	virtual int getHP();
+	virtual double getHP();
 
-	virtual void SetAsDeadIfLessThan0HP();
+	virtual bool SetAsDeadIfLessThan0HP();
 
 	virtual void modifyHP(int modifyAmount);
+
+	
 	
 	virtual bool sprayWillHarm();
 	virtual bool flameWillHarm();
@@ -86,6 +83,8 @@ public:
 
 	int getNumOfFlameThrowerCharges();
 
+	virtual void restoreSocratesFullHP();
+
 	
 
 private:
@@ -121,14 +120,29 @@ class GoodieBaseClass : public ActorBaseClass
 {
 public:
 
-	GoodieBaseClass(double startX, double startY, StudentWorld* inputStudentWorld, int imageID = IID_RESTORE_HEALTH_GOODIE, Direction dir = 0, int depth = 1);
+	GoodieBaseClass(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir = 0, int depth = 1);
 
-	virtual void checkAliveAndIfOverlapWithSocratesActions(int pointsChange, int soundPlayerSoundConstant);
+	virtual bool checkAliveAndIfOverlapWithSocrates();
 
-	virtual void trackAndDieIfExceedLifeTime();
+	virtual void actionsIfOverlapWithSocrates(int pointsChange);
+	virtual void trackAndDieIfExceedLifeTimeThenIncTick();
+
+	virtual void incrementLifetimeTicksTracker();
 
 
 private:
 	int lifetimeTicksTracker;
+	int ticksBeforeSetAsDead;
+};
+
+class RestoreHealthGoodie : public GoodieBaseClass
+{
+public:
+
+	RestoreHealthGoodie(double startX, double startY, StudentWorld* inputStudentWorld, int imageID = IID_RESTORE_HEALTH_GOODIE, Direction dir = 0, int depth = 1);
+
+	void doSomething();
+
+private:
 };
 #endif // ACTOR_H_

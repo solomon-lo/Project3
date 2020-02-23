@@ -30,10 +30,10 @@ public:
 
 	//helper functions
 	void removeDeadActors();
-	int getPlayerObjectHealth();
+	double getPlayerObjectHealth();
 	int getPlayerObjectSpraysLeft();
 	int getPlayerObjectFlamesLeft();
-	int getEuclideanDistance(double baseX, double baseY, double newX, double newY);
+	double getEuclideanDistance(double baseX, double baseY, double newX, double newY);
 	
 private:
 	Socrates* playerObject;

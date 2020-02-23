@@ -1,7 +1,7 @@
 #include "Actor.h"
 #include "StudentWorld.h"
 #include <iostream>
-#include "math.h"
+#include <cmath>
 using namespace std;
 
 class StudentWorld;
@@ -31,7 +31,7 @@ StudentWorld* ActorBaseClass::getStudentWorld()
 ActorBaseClass::~ActorBaseClass()
 {}
 
-int ActorBaseClass::getHP()
+double ActorBaseClass::getHP()
 {
 	return HP;
 }
@@ -40,6 +40,7 @@ void ActorBaseClass::modifyHP(int modifyAmount)
 {
 	HP += modifyAmount;
 }
+
 
 bool ActorBaseClass::sprayWillHarm()
 {
@@ -50,12 +51,15 @@ bool ActorBaseClass::flameWillHarm()
 	return false;
 }
 
-void ActorBaseClass::SetAsDeadIfLessThan0HP()
+bool ActorBaseClass::SetAsDeadIfLessThan0HP()
 {
 	if (getHP() <= 0)
 	{
 		setAsDead();
+		return true;
 	}
+
+	return false;
 }
 
 
@@ -93,6 +97,10 @@ int Socrates::getNumOfFlameThrowerCharges()
 	return numOfFlameThrowerCharges;
 }
 
+void Socrates::restoreSocratesFullHP()
+{
+	modifyHP(100 - getHP());
+}
 
 void Socrates::doSomething()
 {
@@ -160,7 +168,6 @@ void Socrates::doSomething()
 			{
 				for (int i = 0; i < 16; i++)
 				{
-					cerr << "created flame" << i << endl;
 					double shotXDirection = 0;
 					double shotYDirection = 0;
 					getPositionInThisDirection(22 * i, SPRITE_RADIUS * 2, shotXDirection, shotYDirection);
@@ -270,22 +277,68 @@ void FlameProjectile::doSomething()
 // Students:  Add code to this file, Actor.h, StudentWorld.h, and StudentWorld.cpp
 
 
-GoodieBaseClass::GoodieBaseClass(double startX, double startY, StudentWorld* inputStudentWorld, int imageID = IID_RESTORE_HEALTH_GOODIE, Direction dir = 0, int depth = 1)
+GoodieBaseClass::GoodieBaseClass(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth)
 	:ActorBaseClass(imageID, startX, startY, dir, depth, inputStudentWorld)
 {
 	lifetimeTicksTracker = 0;
+	ticksBeforeSetAsDead = max(rand() % (300 - 10 * getStudentWorld()->getLevel()), 50);
 }
 
-void GoodieBaseClass::checkAliveAndIfOverlapWithSocratesActions(int pointsChange, int soundPlayerSoundConstant)
+bool GoodieBaseClass::checkAliveAndIfOverlapWithSocrates()
+
 {
-	SetAsDeadIfLessThan0HP();
+	if (SetAsDeadIfLessThan0HP())
+	{
+		return false;
+	}
 
 	StudentWorld* currentStudentWorldPointer = getStudentWorld();
 	int distanceFromSocrates = currentStudentWorldPointer->getEuclideanDistance(currentStudentWorldPointer->getPlayerObject()->getX(), currentStudentWorldPointer->getPlayerObject()->getX(), getX(), getY());
 	if (distanceFromSocrates < 2 * SPRITE_RADIUS)
 	{
-		currentStudentWorldPointer->increaseScore(pointsChange);
+
+		return true;
+	}
+
+	return false;
+}
+
+void GoodieBaseClass::actionsIfOverlapWithSocrates(int pointsChange)
+{
+
+	StudentWorld* currentStudentWorldPointer = getStudentWorld();
+	currentStudentWorldPointer->increaseScore(pointsChange);
+	setAsDead();
+	currentStudentWorldPointer->playSound(SOUND_GOT_GOODIE);
+}
+
+void GoodieBaseClass::trackAndDieIfExceedLifeTimeThenIncTick()
+{
+	if (lifetimeTicksTracker >= ticksBeforeSetAsDead)
+	{
 		setAsDead();
 	}
-	currentStudentWorldPointer->playSound(soundPlayerSoundConstant);
+}
+
+void GoodieBaseClass::incrementLifetimeTicksTracker()
+{
+	lifetimeTicksTracker++;
+}
+
+RestoreHealthGoodie::RestoreHealthGoodie(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth)
+	:GoodieBaseClass(startX, startY, inputStudentWorld, imageID, dir, depth)
+{}
+
+void RestoreHealthGoodie::doSomething()
+{
+	if (checkAliveAndIfOverlapWithSocrates())
+	{
+		actionsIfOverlapWithSocrates(250);
+
+		getStudentWorld()->getPlayerObject()->restoreSocratesFullHP();
+		return;
+	}
+
+	trackAndDieIfExceedLifeTimeThenIncTick();
+	incrementLifetimeTicksTracker();
 }

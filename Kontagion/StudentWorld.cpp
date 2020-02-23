@@ -63,7 +63,7 @@ int StudentWorld::move()
     return GWSTATUS_CONTINUE_GAME;
 }
 
-int StudentWorld::getPlayerObjectHealth()
+double StudentWorld::getPlayerObjectHealth()
 {
 	return getPlayerObject()->getHP();
 }
@@ -95,7 +95,7 @@ void StudentWorld::removeDeadActors()
 	}
 }
 
-int StudentWorld::getEuclideanDistance(double baseX, double baseY, double newX, double newY)
+double StudentWorld::getEuclideanDistance(double baseX, double baseY, double newX, double newY)
 {
 	double difX = abs((newX - baseX));
 	double difY = abs((newY - baseY));
@@ -109,12 +109,13 @@ ActorBaseClass* StudentWorld::getOverlappedActorPointer(ActorBaseClass* centerAc
 	for (it = ActorsVector.begin(); it != ActorsVector.end(); it++)
 	{
 
-		int distanceToCenterActor = getEuclideanDistance(centerActor->getX(), centerActor->getY(), (*it)->getX(), (*it)->getY());
+		double distanceToCenterActor = getEuclideanDistance(centerActor->getX(), centerActor->getY(), (*it)->getX(), (*it)->getY());
 		if (distanceToCenterActor <= SPRITE_RADIUS * 2)
 		{
 			return *it;
 		}
 	}
+	return nullptr;
 }
 
 
