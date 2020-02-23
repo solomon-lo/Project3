@@ -72,17 +72,17 @@ int StudentWorld::move()
 
 double StudentWorld::getPlayerObjectHealth()
 {
-	return getPlayerObject()->getHP();
+	return playerObject->getHP();
 }
 
 int StudentWorld::getPlayerObjectSpraysLeft()
 {
-	return getPlayerObject()->getNumOfSprayProjectiles();
+	return playerObject->getNumOfSprayProjectiles();
 }
 
 int StudentWorld::getPlayerObjectFlamesLeft()
 {
-	return getPlayerObject()->getNumOfFlameThrowerCharges();
+	return playerObject->getNumOfFlameThrowerCharges();
 }
 void StudentWorld::removeDeadActors()
 {
@@ -122,20 +122,45 @@ void StudentWorld::makeSocratesFullHP()
 	int currentHP = playerObject->getHP();
 	playerObject->modifyHP(100 - currentHP);
 }
-ActorBaseClass* StudentWorld::getOverlappedActorPointer(ActorBaseClass* centerActor)
+bool StudentWorld::wentOverSprayableObject(int centerActorX, int centerActorY)
 {
 	vector<ActorBaseClass*>::iterator it;
 	for (it = ActorsVector.begin(); it != ActorsVector.end(); it++)
 	{
 
-		double distanceToCenterActor = getEuclideanDistance(centerActor->getX(), centerActor->getY(), (*it)->getX(), (*it)->getY());
+		double distanceToCenterActor = getEuclideanDistance(centerActorX, centerActorY, (*it)->getX(), (*it)->getY());
 		if (distanceToCenterActor <= SPRITE_RADIUS * 2)
 		{
-			return *it;
+			if ((*it)->sprayWillHarm() == true)
+			{
+				(*it)->modifyHP(-2);
+				return true;
+			}
 		}
 	}
-	return nullptr;
+	return false;
 }
+
+bool StudentWorld::wentOverFlammableObject(int centerActorX, int centerActorY)
+{
+	vector<ActorBaseClass*>::iterator it;
+	for (it = ActorsVector.begin(); it != ActorsVector.end(); it++)
+	{
+
+		double distanceToCenterActor = getEuclideanDistance(centerActorX, centerActorY, (*it)->getX(), (*it)->getY());
+		if (distanceToCenterActor <= SPRITE_RADIUS * 2)
+		{
+			if ((*it)->flameWillHarm() == true)
+			{
+				(*it)->modifyHP(-5);
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+
 
 
 void StudentWorld::cleanUp()

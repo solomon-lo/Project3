@@ -26,7 +26,8 @@ public:
 	//Socrates* getPlayerObject();
 
 
-	ActorBaseClass* getOverlappedActorPointer(ActorBaseClass* centerActor);
+	bool wentOverSprayableObject(int centerActorX, int centerActorY);
+	bool wentOverFlammableObject(int centerActorX, int centerActorY);
 
 	//helper functions
 	void removeDeadActors();

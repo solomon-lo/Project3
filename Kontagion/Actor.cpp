@@ -228,14 +228,10 @@ void SprayProjectile::doSomething()
 {
 	//TODO:CHECK FOR OVERLAP
 	SetAsDeadIfLessThan0HP();
-	ActorBaseClass* temp = getStudentWorld()->getOverlappedActorPointer(this);
-	if (temp != nullptr)
+	bool temp = getStudentWorld()->wentOverSprayableObject(getX(), getY());
+	if (temp == true)
 	{
-		if (temp->sprayWillHarm() == true)
-		{
-			temp->setAsDead();
-			this->setAsDead();
-		}
+		this->setAsDead();
 	}
 	moveAngle(getDirection(), SPRITE_RADIUS * 2);
 	distanceTraveled += SPRITE_RADIUS * 2;
@@ -257,14 +253,10 @@ void FlameProjectile::doSomething()
 {
 	//TODO:CHECK FOR OVERLAP
 	SetAsDeadIfLessThan0HP();
-	ActorBaseClass* temp = getStudentWorld()->getOverlappedActorPointer(this);
-	if (temp != nullptr)
+	bool temp = getStudentWorld()->wentOverSprayableObject(getX(), getY());
+	if (temp == true)
 	{
-		if (temp->flameWillHarm() == true)
-		{
-			temp->modifyHP(-5);
-			this->setAsDead();
-		}
+		this->setAsDead();
 	}
 	moveAngle(getDirection(), SPRITE_RADIUS * 2);
 	distanceTraveled += SPRITE_RADIUS * 2;
