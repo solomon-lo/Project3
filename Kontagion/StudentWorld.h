@@ -23,7 +23,7 @@ public:
     virtual void cleanUp();
 	~StudentWorld();
 	void addToActorsVector(ActorBaseClass* actorToAdd);
-	Socrates* getPlayerObject();
+	//Socrates* getPlayerObject();
 
 
 	ActorBaseClass* getOverlappedActorPointer(ActorBaseClass* centerActor);
@@ -34,6 +34,8 @@ public:
 	int getPlayerObjectSpraysLeft();
 	int getPlayerObjectFlamesLeft();
 	double getEuclideanDistance(double baseX, double baseY, double newX, double newY);
+	double getDistanceFromSocrates(ActorBaseClass* targetActor);
+	void makeSocratesFullHP();
 	
 private:
 	Socrates* playerObject;

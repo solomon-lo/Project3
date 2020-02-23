@@ -36,6 +36,15 @@ int StudentWorld::init()
 		ActorsVector.push_back(newDirtPile);
 	}
 
+
+	//init a goodie(MUST BE REMOVED, THIS IS FOR TESTING ONLY)
+	const double PI = 4 * atan(1);
+	//THE 90 WILL BE REPLACED WITH A RANDOM NUMBER FROM 0 TO 360
+	double goodieX = (VIEW_WIDTH / 2) + (128 * cos(175 * 1.0 / 360 * 2 * PI));
+	//cerr << "getpositionalnagle is" << getPositionalAngle() << endl;
+	//cerr << "newX is" << newX << endl;
+	double goodieY = (VIEW_HEIGHT / 2) + (128 * sin(175 * 1.0 / 360 * 2 * PI));
+	ActorsVector.push_back(new RestoreHealthGoodie(goodieX, goodieY, this));
 	//init Socrates
 	playerObject = new Socrates(this);
 
@@ -56,8 +65,6 @@ int StudentWorld::move()
 	}
 
 	removeDeadActors();
-
-
 	setGameStatText("Score: " + to_string(getScore()) + " Level: " + to_string(getLevel()) + " Lives: " + to_string(getLives())+ " Health: " + to_string(getLives()) + " Sprays: " + to_string(getPlayerObjectSpraysLeft()) + " Flames: " + to_string(getPlayerObjectFlamesLeft()));
 
     return GWSTATUS_CONTINUE_GAME;
@@ -103,6 +110,18 @@ double StudentWorld::getEuclideanDistance(double baseX, double baseY, double new
 	return sqrt(toSqrt);
 }
 
+double StudentWorld::getDistanceFromSocrates(ActorBaseClass* targetActor)
+{
+	int actorX = targetActor->getX();
+	int actorY = targetActor->getY();
+	return getEuclideanDistance(playerObject->getX(), playerObject->getY(), actorX, actorY);
+}
+
+void StudentWorld::makeSocratesFullHP()
+{
+	int currentHP = playerObject->getHP();
+	playerObject->modifyHP(100 - currentHP);
+}
 ActorBaseClass* StudentWorld::getOverlappedActorPointer(ActorBaseClass* centerActor)
 {
 	vector<ActorBaseClass*>::iterator it;
@@ -140,7 +159,7 @@ StudentWorld::~StudentWorld()
 	this->cleanUp();
 }
 
-Socrates* StudentWorld::getPlayerObject()
-{
-	return playerObject;
-}
+//Socrates* StudentWorld::getPlayerObject()
+//{
+//	return playerObject;
+//}

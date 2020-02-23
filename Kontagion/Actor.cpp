@@ -280,8 +280,18 @@ void FlameProjectile::doSomething()
 GoodieBaseClass::GoodieBaseClass(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth)
 	:ActorBaseClass(imageID, startX, startY, dir, depth, inputStudentWorld)
 {
+
+	int randomTime = randInt(50, (300 - 10 * getStudentWorld()->getLevel()));
+	cerr << "randomly generated" << randomTime << endl;
 	lifetimeTicksTracker = 0;
-	ticksBeforeSetAsDead = max(rand() % (300 - 10 * getStudentWorld()->getLevel()), 50);
+	for (int i = 0; i < 20; i++)
+	{
+		randomTime = randInt(50, (300 - 10 * getStudentWorld()->getLevel()));
+		cerr << "randomly generated" << randomTime << endl;
+	}
+
+	ticksBeforeSetAsDead = max(randomTime, 50);
+	cerr << ticksBeforeSetAsDead << " is the time" << endl;
 }
 
 bool GoodieBaseClass::checkAliveAndIfOverlapWithSocrates()
@@ -290,13 +300,14 @@ bool GoodieBaseClass::checkAliveAndIfOverlapWithSocrates()
 	if (SetAsDeadIfLessThan0HP())
 	{
 		return false;
+		cerr << "set as dead because under 1 HP" << endl;
 	}
 
 	StudentWorld* currentStudentWorldPointer = getStudentWorld();
-	int distanceFromSocrates = currentStudentWorldPointer->getEuclideanDistance(currentStudentWorldPointer->getPlayerObject()->getX(), currentStudentWorldPointer->getPlayerObject()->getX(), getX(), getY());
+	int distanceFromSocrates = currentStudentWorldPointer->getDistanceFromSocrates(this);
 	if (distanceFromSocrates < 2 * SPRITE_RADIUS)
 	{
-
+		cerr << "overlapped" << endl;
 		return true;
 	}
 
@@ -314,14 +325,11 @@ void GoodieBaseClass::actionsIfOverlapWithSocrates(int pointsChange)
 
 void GoodieBaseClass::trackAndDieIfExceedLifeTimeThenIncTick()
 {
-	if (lifetimeTicksTracker >= ticksBeforeSetAsDead)
+	if (lifetimeTicksTracker >= ticksBeforeSetAsDead) 
 	{
 		setAsDead();
 	}
-}
 
-void GoodieBaseClass::incrementLifetimeTicksTracker()
-{
 	lifetimeTicksTracker++;
 }
 
@@ -333,12 +341,12 @@ void RestoreHealthGoodie::doSomething()
 {
 	if (checkAliveAndIfOverlapWithSocrates())
 	{
+		//cerr << "overlppaed with soc and goodie" << endl;
 		actionsIfOverlapWithSocrates(250);
 
-		getStudentWorld()->getPlayerObject()->restoreSocratesFullHP();
+		getStudentWorld()->makeSocratesFullHP();
 		return;
 	}
 
 	trackAndDieIfExceedLifeTimeThenIncTick();
-	incrementLifetimeTicksTracker();
 }

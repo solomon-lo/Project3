@@ -127,7 +127,6 @@ public:
 	virtual void actionsIfOverlapWithSocrates(int pointsChange);
 	virtual void trackAndDieIfExceedLifeTimeThenIncTick();
 
-	virtual void incrementLifetimeTicksTracker();
 
 
 private:
