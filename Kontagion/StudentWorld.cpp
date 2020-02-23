@@ -1,4 +1,3 @@
-//i think this is project3_draft1 save, not accidental skeleton.zip opened save
 #include "StudentWorld.h"
 #include "GameConstants.h"
 #include <string>
@@ -96,7 +95,6 @@ void StudentWorld::removeDeadActors()
 	}
 }
 
-
 int StudentWorld::getEuclideanDistance(double baseX, double baseY, double newX, double newY)
 {
 	double difX = abs((newX - baseX));
@@ -112,7 +110,7 @@ ActorBaseClass* StudentWorld::getOverlappedActorPointer(ActorBaseClass* centerAc
 	{
 
 		int distanceToCenterActor = getEuclideanDistance(centerActor->getX(), centerActor->getY(), (*it)->getX(), (*it)->getY());
-		if (distanceToCenterActor <= 8)
+		if (distanceToCenterActor <= SPRITE_RADIUS * 2)
 		{
 			return *it;
 		}

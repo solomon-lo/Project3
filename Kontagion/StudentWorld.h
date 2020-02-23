@@ -24,6 +24,8 @@ public:
 	~StudentWorld();
 	void addToActorsVector(ActorBaseClass* actorToAdd);
 	Socrates* getPlayerObject();
+
+
 	ActorBaseClass* getOverlappedActorPointer(ActorBaseClass* centerActor);
 
 	//helper functions

@@ -45,7 +45,18 @@ bool ActorBaseClass::sprayWillHarm()
 {
 	return false;
 }
+bool ActorBaseClass::flameWillHarm()
+{
+	return false;
+}
 
+void ActorBaseClass::SetAsDeadIfLessThan0HP()
+{
+	if (getHP() <= 0)
+	{
+		setAsDead();
+	}
+}
 
 
 ////////////////////////////
@@ -81,6 +92,7 @@ int Socrates::getNumOfFlameThrowerCharges()
 {
 	return numOfFlameThrowerCharges;
 }
+
 
 void Socrates::doSomething()
 {
@@ -141,6 +153,24 @@ void Socrates::doSomething()
 			}
 
 		}
+
+		if (ch == KEY_PRESS_ENTER)
+		{
+			if (true)	//SHOULD HAVE numOfFlameThrowerCharges > 0
+			{
+				for (int i = 0; i < 16; i++)
+				{
+					cerr << "created flame" << i << endl;
+					double shotXDirection = 0;
+					double shotYDirection = 0;
+					getPositionInThisDirection(22 * i, SPRITE_RADIUS * 2, shotXDirection, shotYDirection);
+					FlameProjectile* shotFlame = new FlameProjectile(shotXDirection, shotYDirection, getStudentWorld(), IID_FLAME, 22 * i, 1, 1);
+					getStudentWorld()->addToActorsVector(shotFlame);
+				}
+				numOfFlameThrowerCharges--;
+				getStudentWorld()->playSound(SOUND_PLAYER_FIRE);
+			}
+		}
 	}
 	else
 	{
@@ -161,10 +191,17 @@ DirtPile::DirtPile(double startX, double startY, StudentWorld* inputStudentWorld
 {}
 
 void DirtPile::doSomething()
-{}
+{
+	SetAsDeadIfLessThan0HP();
+}
 
 
 bool DirtPile::sprayWillHarm()
+{
+	return true;
+}
+
+bool DirtPile::flameWillHarm()
 {
 	return true;
 }
@@ -183,10 +220,7 @@ SprayProjectile::SprayProjectile(double startX, double startY, StudentWorld* inp
 void SprayProjectile::doSomething()
 {
 	//TODO:CHECK FOR OVERLAP
-	if (getHP() < 0)
-	{
-		setAsDead();
-	}
+	SetAsDeadIfLessThan0HP();
 	ActorBaseClass* temp = getStudentWorld()->getOverlappedActorPointer(this);
 	if (temp != nullptr)
 	{
@@ -204,7 +238,54 @@ void SprayProjectile::doSomething()
 	{
 		setAsDead();
 	}
+}
 
+FlameProjectile::FlameProjectile(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth, int inputHP)
+	:ActorBaseClass(imageID, startX, startY, dir, depth, inputStudentWorld, 1)
+{
+	distanceTraveled = 0;
+}
 
+void FlameProjectile::doSomething()
+{
+	//TODO:CHECK FOR OVERLAP
+	SetAsDeadIfLessThan0HP();
+	ActorBaseClass* temp = getStudentWorld()->getOverlappedActorPointer(this);
+	if (temp != nullptr)
+	{
+		if (temp->flameWillHarm() == true)
+		{
+			temp->modifyHP(-5);
+			this->setAsDead();
+		}
+	}
+	moveAngle(getDirection(), SPRITE_RADIUS * 2);
+	distanceTraveled += SPRITE_RADIUS * 2;
+
+	if (distanceTraveled >= 32)
+	{
+		setAsDead();
+	}
 }
 // Students:  Add code to this file, Actor.h, StudentWorld.h, and StudentWorld.cpp
+
+
+GoodieBaseClass::GoodieBaseClass(double startX, double startY, StudentWorld* inputStudentWorld, int imageID = IID_RESTORE_HEALTH_GOODIE, Direction dir = 0, int depth = 1)
+	:ActorBaseClass(imageID, startX, startY, dir, depth, inputStudentWorld)
+{
+	lifetimeTicksTracker = 0;
+}
+
+void GoodieBaseClass::checkAliveAndIfOverlapWithSocratesActions(int pointsChange, int soundPlayerSoundConstant)
+{
+	SetAsDeadIfLessThan0HP();
+
+	StudentWorld* currentStudentWorldPointer = getStudentWorld();
+	int distanceFromSocrates = currentStudentWorldPointer->getEuclideanDistance(currentStudentWorldPointer->getPlayerObject()->getX(), currentStudentWorldPointer->getPlayerObject()->getX(), getX(), getY());
+	if (distanceFromSocrates < 2 * SPRITE_RADIUS)
+	{
+		currentStudentWorldPointer->increaseScore(pointsChange);
+		setAsDead();
+	}
+	currentStudentWorldPointer->playSound(soundPlayerSoundConstant);
+}

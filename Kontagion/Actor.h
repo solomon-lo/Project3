@@ -41,9 +41,12 @@ public:
 
 	virtual int getHP();
 
+	virtual void SetAsDeadIfLessThan0HP();
+
 	virtual void modifyHP(int modifyAmount);
 	
 	virtual bool sprayWillHarm();
+	virtual bool flameWillHarm();
 
 
 
@@ -62,6 +65,8 @@ public:
 	virtual void doSomething();
 
 	virtual bool sprayWillHarm();
+
+	virtual bool flameWillHarm();
 
 private:
 };
@@ -99,5 +104,31 @@ public:
 
 private:
 	int distanceTraveled;
+};
+
+class FlameProjectile : public ActorBaseClass
+{
+public:
+	FlameProjectile(double startX, double startY, StudentWorld* inputStudentWorld, int imageID = IID_FLAME, Direction dir = 0, int depth = 1, int inputHP = 1);
+
+	void doSomething();
+
+private:
+	int distanceTraveled;
+};
+
+class GoodieBaseClass : public ActorBaseClass
+{
+public:
+
+	GoodieBaseClass(double startX, double startY, StudentWorld* inputStudentWorld, int imageID = IID_RESTORE_HEALTH_GOODIE, Direction dir = 0, int depth = 1);
+
+	virtual void checkAliveAndIfOverlapWithSocratesActions(int pointsChange, int soundPlayerSoundConstant);
+
+	virtual void trackAndDieIfExceedLifeTime();
+
+
+private:
+	int lifetimeTicksTracker;
 };
 #endif // ACTOR_H_
