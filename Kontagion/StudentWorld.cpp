@@ -44,7 +44,7 @@ int StudentWorld::init()
 	//cerr << "getpositionalnagle is" << getPositionalAngle() << endl;
 	//cerr << "newX is" << newX << endl;
 	double goodieY = (VIEW_HEIGHT / 2) + (128 * sin(175 * 1.0 / 360 * 2 * PI));
-	ActorsVector.push_back(new Food(goodieX, goodieY, this));
+	ActorsVector.push_back(new Salmonella(128, 128, this));
 
 	double flameX = (VIEW_WIDTH / 2) + (128 * cos(160 * 1.0 / 360 * 2 * PI));
 	double flameY = (VIEW_HEIGHT / 2) + (128 * sin(160 * 1.0 / 360 * 2 * PI));
@@ -160,7 +160,6 @@ bool StudentWorld::wentOverSprayableObject(int centerActorX, int centerActorY)
 		{
 			if ((*it)->sprayWillHarm() == true)
 			{
-				(*it)->modifyHP(-2);
 				return true;
 			}
 		}
@@ -187,14 +186,37 @@ bool StudentWorld::wentOverFlammableObject(int centerActorX, int centerActorY)
 	return false;
 }
 
-bool StudentWorld::wentOverFlammableObject(int centerActorX, int centerActorY)
+bool StudentWorld::wentOverDirtPile(int centerActorX, int centerActorY)
 {
 	vector<ActorBaseClass*>::iterator it;
 	for (it = ActorsVector.begin(); it != ActorsVector.end(); it++)
 	{
 
 		double distanceToCenterActor = getEuclideanDistance(centerActorX, centerActorY, (*it)->getX(), (*it)->getY());
-		if (distanceToCenterActor <= SPRITE_RADIUS * 2)
+		if (distanceToCenterActor <= SPRITE_RADIUS)	//DIFFERENT FROM REGULAR OVERLAP
+		{
+			if ((*it)->blocksBacteriumMovement() == true)
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+//double angle = (180/PI) * atan2(player->getY() - a->getY()), player->getX() - a-getX()));
+
+
+//food or socrates is front value
+//bacteria is back value
+bool StudentWorld::wentOverFood(int centerActorX, int centerActorY)
+{
+	vector<ActorBaseClass*>::iterator it;
+	for (it = ActorsVector.begin(); it != ActorsVector.end(); it++)
+	{
+
+		double distanceToCenterActor = getEuclideanDistance(centerActorX, centerActorY, (*it)->getX(), (*it)->getY());
+		if (distanceToCenterActor <= SPRITE_RADIUS)
 		{
 			if ((*it)->isEdible() == true)
 			{
@@ -205,6 +227,37 @@ bool StudentWorld::wentOverFlammableObject(int centerActorX, int centerActorY)
 	return false;
 }
 
+bool StudentWorld::isThisCoordinateFilled(double testX, double textY)
+{
+	vector<ActorBaseClass*>::iterator it;
+	for (it = ActorsVector.begin(); it != ActorsVector.end(); it++)
+	{
+
+	}
+	return false;
+}
+
+bool StudentWorld::findFoodWithin128(double bacteriaX, double bacteriaY, double& foodX, double& foodY)
+{
+	vector<ActorBaseClass*>::iterator it;
+	for (it = ActorsVector.begin(); it != ActorsVector.end(); it++)
+	{
+
+		double distanceToActor = getEuclideanDistance(bacteriaX, bacteriaY, (*it)->getX(), (*it)->getY());
+		if (distanceToActor <= 128)
+		{
+			if ((*it)->isEdible() == true)
+			{
+				foodX = (*it)->getX();
+				foodY = (*it)->getY();
+				return true;
+			}
+		}
+	}
+	foodX = -1;
+	foodY = -1;
+	return false;
+}
 
 
 void StudentWorld::cleanUp()

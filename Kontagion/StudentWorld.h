@@ -29,6 +29,8 @@ public:
 	bool wentOverSprayableObject(int centerActorX, int centerActorY);
 	bool wentOverFlammableObject(int centerActorX, int centerActorY);
 	bool wentOverFood(int centerActorX, int centerActorY);
+	bool wentOverDirtPile(int centerActorX, int centerActorY);
+	bool isThisCoordinateFilled(double testX, double textY);
 
 	//helper functions
 	void removeDeadActors();
@@ -41,6 +43,7 @@ public:
 	void modifySocratesHP(int modifyAmount);
 	void flameThrowerGoodieEffect();
 	void fungusEffect();
+	bool findFoodWithin128(double bacteriaX, double bacteriaY, double& foodX, double& foodY);
 	
 private:
 	Socrates* playerObject;

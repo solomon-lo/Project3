@@ -1,7 +1,9 @@
 #include "Actor.h"
 #include "StudentWorld.h"
+#include "GameConstants.h"
 #include <iostream>
 #include <cmath>
+#include<math.h>
 using namespace std;
 
 class StudentWorld;
@@ -41,6 +43,10 @@ void ActorBaseClass::modifyHP(int modifyAmount)
 	HP += modifyAmount;
 }
 
+bool ActorBaseClass::blocksBacteriumMovement() const
+{
+	return false;
+}
 
 bool ActorBaseClass::sprayWillHarm()
 {
@@ -125,30 +131,20 @@ void Socrates::doSomething()
 
 			const double PI = 4 * atan(1);
 			double newX = 128 + (128 * cos((getPositionalAngle() + 5.000000000) * 1.0 / 360 * 2 * PI));
-			//cerr << "getpositionalnagle is" << getPositionalAngle() << endl;
-			//cerr << "newX is" << newX << endl;
+
 			double newY = 128 + (128 * sin((getPositionalAngle() + 5.000000000) * 1.0 / 360 * 2 * PI));
-			//cerr << "newY is" << newY << endl;
+
 			moveTo(newX, newY);
 			changePositionalAngle(5);
 
-			//int premoveDegrees = getDirection();
-			//int radianConversion = (premoveDegrees + 5) * 3.1415926f / 180.0f;
-			//int newX = (120) * cos(radianConversion) + (128);
-			//cerr << "newX is" << newX << endl;
-			//int newY = (120) * sin((radianConversion) + (128));
-			//cerr << "newY is" << newY << endl;
-			//moveTo(newX, newY);
 			setDirection(getDirection() + 5);
 		}
 		if (ch == KEY_PRESS_RIGHT)
 		{
 			const double PI = 4 * atan(1);
 			double newX = 128 + (128 * cos((getPositionalAngle() - 5.00000) * 1.0 / 360 * 2 * PI));
-			//cerr << "getpositionalnagle is" << getPositionalAngle() << endl;
-			//cerr << "newX is" << newX << endl;
 			double newY = 128 + (128 * sin((getPositionalAngle() - 5.00000) * 1.0 / 360 * 2 * PI));
-			//cerr << "newY is" << newY << endl;
+
 			moveTo(newX, newY);
 			changePositionalAngle(-5);
 
@@ -213,10 +209,16 @@ void DirtPile::doSomething()
 
 bool DirtPile::sprayWillHarm()
 {
+	modifyHP(-1);
 	return true;
 }
 
 bool DirtPile::flameWillHarm()
+{
+	return true;
+}
+
+bool DirtPile::blocksBacteriumMovement() const
 {
 	return true;
 }
@@ -302,16 +304,13 @@ GoodieBaseClass::GoodieBaseClass(double startX, double startY, StudentWorld* inp
 {
 
 	int randomTime = randInt(50, (300 - 10 * getStudentWorld()->getLevel()));
-	cerr << "randomly generated" << randomTime << endl;
 	lifetimeTicksTracker = 0;
 	for (int i = 0; i < 20; i++)
 	{
 		randomTime = randInt(50, (300 - 10 * getStudentWorld()->getLevel()));
-		cerr << "randomly generated" << randomTime << endl;
 	}
 
 	ticksBeforeSetAsDead = max(randomTime, 50);
-	cerr << ticksBeforeSetAsDead << " is the time" << endl;
 }
 
 bool ActorBaseClass::checkAliveAndIfOverlapWithSocrates()
@@ -442,6 +441,8 @@ Bacteria::Bacteria(double startX, double startY, StudentWorld* inputStudentWorld
 	:ActorBaseClass(imageID, startX, startY, dir, depth, inputStudentWorld, inputHP)
 {
 	foodEaten = 0;
+
+	movementPlanDistance = 0;
 }
 void Bacteria::modifyFoodEaten(int modifyAmount)
 {
@@ -478,6 +479,16 @@ bool Bacteria::flameWillHarm()
 	return true;
 }
 
+void Bacteria::modifyMovementPlanDistance(int modifyAmount)
+{
+	movementPlanDistance += modifyAmount;
+}
+
+int Bacteria::getMovementPlanDistance()
+{
+	return movementPlanDistance;
+}
+
 int Bacteria::getFoodEaten()
 {
 	return foodEaten;
@@ -485,7 +496,6 @@ int Bacteria::getFoodEaten()
 Salmonella::Salmonella(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth, int inputHP)
 	:Bacteria(startX, startY, inputStudentWorld, imageID, dir, 0, 4)
 {
-
 }
 void Salmonella::doSomething()
 {
@@ -511,7 +521,66 @@ void Salmonella::doSomething()
 		}
 		hasDividedThisTick = true;
 	}
+	bool temp = getStudentWorld()->wentOverFood(getX(), getY());
+	if (temp == true)
+	{
+		modifyFoodEaten(1);
+	}
 
+	double possibleFoodX;
+	double possibleFoodY;
+	if (getMovementPlanDistance() > 0)
+	{
+		modifyMovementPlanDistance(-1);
+		double tempX;
+		double tempY;
+		getPositionInThisDirection(getDirection(), 3, tempX, tempY);
 
+		//following if statement checks to see if it DOESN'T go outside of circle or go over dirtpile
+		if (!(getStudentWorld()->getEuclideanDistance(tempX, tempY, VIEW_WIDTH / 2, VIEW_HEIGHT / 2) > VIEW_DIAMETER) && !(getStudentWorld()->wentOverDirtPile(tempX, tempY)))
+		{
+			moveAngle(getDirection(), 3);
+		}
+		else
+		{
+			int newDirection = randInt(0, 359);
+			setDirection(newDirection);
+			modifyMovementPlanDistance(10 - getMovementPlanDistance());
+		}
+	}
+	else
+	{
+		double newFoodX;
+		double newFoodY;
+
+		//food or socrates is front value
+//bacteria is back value
+		if (getStudentWorld()->findFoodWithin128(getX(), getY(), newFoodX, newFoodY))
+		{
+			const double PI = 4 * atan(1);
+			double angle = (180.00000 / PI) * atan2(newFoodX - getX(), newFoodY - getY());
+			setDirection(angle);
+			double newXAfterFoodFound;
+			double newYAfterFoodFound;
+			getPositionInThisDirection(getDirection(), 3, newXAfterFoodFound, newYAfterFoodFound);
+			if (getStudentWorld()->wentOverDirtPile(newXAfterFoodFound, newYAfterFoodFound))
+			{
+				int randomDirection = randInt(0, 359);
+				setDirection(randomDirection);
+				modifyMovementPlanDistance(10 - getMovementPlanDistance());
+				return;
+			}
+
+		}
+		else
+		{
+			int randomDirection = randInt(0, 359);
+			setDirection(randomDirection);
+			modifyMovementPlanDistance(10 - getMovementPlanDistance());
+			return;
+		}
+	}
 }
+
+
 

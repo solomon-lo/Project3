@@ -47,6 +47,7 @@ public:
 
 	virtual bool isEdible() const;
 
+	virtual bool blocksBacteriumMovement() const;
 
 
 private:
@@ -66,6 +67,8 @@ public:
 	virtual bool sprayWillHarm();
 
 	virtual bool flameWillHarm();
+
+	virtual bool blocksBacteriumMovement() const;
 
 private:
 };
@@ -133,6 +136,7 @@ public:
 
 	virtual bool isEdible() const;
 };
+
 class GoodieBaseClass : public ActorBaseClass
 {
 public:
@@ -198,16 +202,18 @@ public:
 	virtual bool sprayWillHarm();
 	virtual bool flameWillHarm();
 	void modifyFoodEaten(int modifyAmount);
+	void modifyMovementPlanDistance(int modifyAmount);
 	double newXAfter3Food(double inputX);
 	double newYAfter3Food(double inputY);
 	int getFoodEaten();
 
 
 	//virtual bool preventsLevelCompleting() const;
-
+	int getMovementPlanDistance();
 	void doSomething() = 0;
 private:
 	int foodEaten;
+	int movementPlanDistance;
 };
 
 class Salmonella : public Bacteria

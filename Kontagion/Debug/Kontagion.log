@@ -1,10 +1,19 @@
 ﻿  Actor.cpp
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(107,15): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(236,69): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(236,61): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(261,69): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(261,61): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(319,27): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(499,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(500,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(116,15): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(241,69): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(241,61): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(266,69): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(266,61): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(326,27): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(517,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(518,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(524,58): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(524,50): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(540,161): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(540,154): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(562,17): warning C4244: 'argument': conversion from 'double' to 'Direction', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(566,64): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(566,44): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(531,9): warning C4101: 'possibleFoodY': unreferenced local variable
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(530,9): warning C4101: 'possibleFoodX': unreferenced local variable
   Kontagion.vcxproj -> C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Debug\Kontagion.exe
