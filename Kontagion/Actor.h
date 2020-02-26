@@ -40,10 +40,12 @@ public:
 
 	virtual void modifyHP(int modifyAmount);
 
-	
+	virtual bool checkAliveAndIfOverlapWithSocrates();
 	
 	virtual bool sprayWillHarm();
 	virtual bool flameWillHarm();
+
+	virtual bool isEdible() const;
 
 
 
@@ -96,6 +98,7 @@ private:
 
 };
 
+
 class SprayProjectile : public ActorBaseClass
 {
 public:
@@ -118,13 +121,25 @@ private:
 	int distanceTraveled;
 };
 
+class Food : public ActorBaseClass
+{
+public:
+	Food(double startX, double startY, StudentWorld* inputStudentWorld, int imageID = IID_FOOD, Direction dir = 90, int depth = 1, int inputHP = 1);
+
+	void doSomething();
+	virtual bool sprayWillHarm();
+
+	virtual bool flameWillHarm();
+
+	virtual bool isEdible() const;
+};
 class GoodieBaseClass : public ActorBaseClass
 {
 public:
 
 	GoodieBaseClass(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir = 0, int depth = 1);
 
-	virtual bool checkAliveAndIfOverlapWithSocrates();
+	
 
 	virtual void baseActionsIfOverlapWithSocrates(int pointsChange);
 	virtual void trackAndDieIfExceedLifeTimeThenIncTick();
@@ -174,4 +189,33 @@ public:
 
 	void doSomething();
 };
+
+class Bacteria : public ActorBaseClass
+{
+public:
+
+	Bacteria(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir = 90, int depth = 0, int inputHP = 4);
+	virtual bool sprayWillHarm();
+	virtual bool flameWillHarm();
+	void modifyFoodEaten(int modifyAmount);
+	double newXAfter3Food(double inputX);
+	double newYAfter3Food(double inputY);
+	int getFoodEaten();
+
+
+	//virtual bool preventsLevelCompleting() const;
+
+	void doSomething() = 0;
+private:
+	int foodEaten;
+};
+
+class Salmonella : public Bacteria
+{
+public:
+
+	Salmonella(double startX, double startY, StudentWorld* inputStudentWorld, int imageID = IID_SALMONELLA, Direction dir = 90, int depth = 0, int inputHP = 4);
+	void doSomething();
+};
+
 #endif // ACTOR_H_

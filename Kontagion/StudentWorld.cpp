@@ -44,14 +44,20 @@ int StudentWorld::init()
 	//cerr << "getpositionalnagle is" << getPositionalAngle() << endl;
 	//cerr << "newX is" << newX << endl;
 	double goodieY = (VIEW_HEIGHT / 2) + (128 * sin(175 * 1.0 / 360 * 2 * PI));
-	ActorsVector.push_back(new RestoreHealthGoodie(goodieX, goodieY, this));
+	ActorsVector.push_back(new Food(goodieX, goodieY, this));
 
 	double flameX = (VIEW_WIDTH / 2) + (128 * cos(160 * 1.0 / 360 * 2 * PI));
-	//cerr << "getpositionalnagle is" << getPositionalAngle() << endl;
-	//cerr << "newX is" << newX << endl;
 	double flameY = (VIEW_HEIGHT / 2) + (128 * sin(160 * 1.0 / 360 * 2 * PI));
 	ActorsVector.push_back(new FlameThrowerGoodie(flameX, flameY, this));
-	//init Socrates
+
+	//double extraLifeX = (VIEW_WIDTH / 2) + (128 * cos(185 * 1.0 / 360 * 2 * PI));
+	//double extraLifeY = (VIEW_HEIGHT / 2) + (128 * sin(185 * 1.0 / 360 * 2 * PI));
+	//ActorsVector.push_back(new ExtraLifeGoodie(extraLifeX, extraLifeY, this));
+	//playerObject = new Socrates(this);
+
+	double fungusX = (VIEW_WIDTH / 2) + (128 * cos(185 * 1.0 / 360 * 2 * PI));
+	double fungusY = (VIEW_HEIGHT / 2) + (128 * sin(185 * 1.0 / 360 * 2 * PI));
+	ActorsVector.push_back(new Fungus(fungusX, fungusY, this));
 	playerObject = new Socrates(this);
 
 	//init food items
@@ -71,7 +77,7 @@ int StudentWorld::move()
 	}
 
 	removeDeadActors();
-	setGameStatText("Score: " + to_string(getScore()) + " Level: " + to_string(getLevel()) + " Lives: " + to_string(getLives())+ " Health: " + to_string(getLives()) + " Sprays: " + to_string(getPlayerObjectSpraysLeft()) + " Flames: " + to_string(getPlayerObjectFlamesLeft()));
+	setGameStatText("Score: " + to_string(getScore()) + " Level: " + to_string(getLevel()) + " Lives: " + to_string(getLives())+ " Health: " + to_string(getPlayerObjectHealth()) + " Sprays: " + to_string(getPlayerObjectSpraysLeft()) + " Flames: " + to_string(getPlayerObjectFlamesLeft()));
 
     return GWSTATUS_CONTINUE_GAME;
 }
@@ -129,6 +135,11 @@ void StudentWorld::makeSocratesFullHP()
 	playerObject->modifyHP(100 - currentHP);
 }
 
+void StudentWorld::modifySocratesHP(int modifyAmount)
+{
+	playerObject->modifyHP(modifyAmount);
+}
+
 void StudentWorld::flameThrowerGoodieEffect()
 {
 	playerObject->modifyNumOfFlameThrowerCharges(5);
@@ -176,6 +187,23 @@ bool StudentWorld::wentOverFlammableObject(int centerActorX, int centerActorY)
 	return false;
 }
 
+bool StudentWorld::wentOverFlammableObject(int centerActorX, int centerActorY)
+{
+	vector<ActorBaseClass*>::iterator it;
+	for (it = ActorsVector.begin(); it != ActorsVector.end(); it++)
+	{
+
+		double distanceToCenterActor = getEuclideanDistance(centerActorX, centerActorY, (*it)->getX(), (*it)->getY());
+		if (distanceToCenterActor <= SPRITE_RADIUS * 2)
+		{
+			if ((*it)->isEdible() == true)
+			{
+				(*it)->modifyHP(-1);
+			}
+		}
+	}
+	return false;
+}
 
 
 

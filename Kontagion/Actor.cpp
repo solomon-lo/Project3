@@ -62,7 +62,10 @@ bool ActorBaseClass::SetAsDeadIfLessThan0HP()
 	return false;
 }
 
-
+bool ActorBaseClass::isEdible() const
+{
+	return false;
+}
 ////////////////////////////
 //SOCRATES IMPLEMENTATIONS
 ////////////////////////////
@@ -169,7 +172,7 @@ void Socrates::doSomething()
 
 		if (ch == KEY_PRESS_ENTER)
 		{
-			if (true)	//SHOULD HAVE numOfFlameThrowerCharges > 0
+			if (numOfFlameThrowerCharges > 0)	//SHOULD HAVE numOfFlameThrowerCharges > 0
 			{
 				for (int i = 0; i < 16; i++)
 				{
@@ -273,7 +276,27 @@ void FlameProjectile::doSomething()
 }
 // Students:  Add code to this file, Actor.h, StudentWorld.h, and StudentWorld.cpp
 
+Food::Food(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth, int inputHP)
+	:ActorBaseClass(imageID, startX, startY, dir, depth, inputStudentWorld, inputHP)
+{}
 
+void Food::doSomething()
+{}
+
+bool Food::sprayWillHarm()
+{
+	return false;
+}
+
+bool Food::flameWillHarm()
+{
+	return false;
+}
+
+bool Food::isEdible() const
+{
+	return true;
+}
 GoodieBaseClass::GoodieBaseClass(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth)
 	:ActorBaseClass(imageID, startX, startY, dir, depth, inputStudentWorld)
 {
@@ -291,7 +314,7 @@ GoodieBaseClass::GoodieBaseClass(double startX, double startY, StudentWorld* inp
 	cerr << ticksBeforeSetAsDead << " is the time" << endl;
 }
 
-bool GoodieBaseClass::checkAliveAndIfOverlapWithSocrates()
+bool ActorBaseClass::checkAliveAndIfOverlapWithSocrates()
 
 {
 	if (SetAsDeadIfLessThan0HP())
@@ -412,3 +435,83 @@ void Fungus::doSomething()
 
 	trackAndDieIfExceedLifeTimeThenIncTick();
 }
+
+//Bacteria Implementation
+
+Bacteria::Bacteria(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth, int inputHP)
+	:ActorBaseClass(imageID, startX, startY, dir, depth, inputStudentWorld, inputHP)
+{
+	foodEaten = 0;
+}
+void Bacteria::modifyFoodEaten(int modifyAmount)
+{
+	foodEaten += modifyAmount;
+}
+
+double Bacteria::newXAfter3Food(double inputX)
+{
+	if (inputX < VIEW_WIDTH / 2)
+	{
+		return inputX + SPRITE_RADIUS;
+	}
+
+	return inputX - SPRITE_RADIUS;
+}
+
+double Bacteria::newYAfter3Food(double inputY)
+{
+	if (inputY < VIEW_HEIGHT / 2)
+	{
+		return inputY + SPRITE_HEIGHT;
+	}
+
+	return inputY - SPRITE_HEIGHT;
+}
+
+bool Bacteria::sprayWillHarm()
+{
+	return true;
+}
+
+bool Bacteria::flameWillHarm()
+{
+	return true;
+}
+
+int Bacteria::getFoodEaten()
+{
+	return foodEaten;
+}
+Salmonella::Salmonella(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth, int inputHP)
+	:Bacteria(startX, startY, inputStudentWorld, imageID, dir, 0, 4)
+{
+
+}
+void Salmonella::doSomething()
+{
+	SetAsDeadIfLessThan0HP();
+
+	bool overlappedWithSocratesThisTick = false;
+	bool hasDividedThisTick = false;
+
+	if (checkAliveAndIfOverlapWithSocrates())
+	{
+		overlappedWithSocratesThisTick = true;
+		getStudentWorld()->modifySocratesHP(-1);	//tells socrates to take 1 damage	
+	}
+
+	if (!overlappedWithSocratesThisTick)
+	{
+		if (getFoodEaten() == 3)
+		{
+			int newX = newXAfter3Food(getX());
+			int newY = newYAfter3Food(getY());
+			getStudentWorld()->addToActorsVector(new Salmonella(newX, newY, getStudentWorld()));
+			modifyFoodEaten(-3);
+		}
+		hasDividedThisTick = true;
+	}
+
+
+}
+

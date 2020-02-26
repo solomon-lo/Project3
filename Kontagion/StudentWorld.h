@@ -28,6 +28,7 @@ public:
 
 	bool wentOverSprayableObject(int centerActorX, int centerActorY);
 	bool wentOverFlammableObject(int centerActorX, int centerActorY);
+	bool wentOverFood(int centerActorX, int centerActorY);
 
 	//helper functions
 	void removeDeadActors();
@@ -37,6 +38,7 @@ public:
 	double getEuclideanDistance(double baseX, double baseY, double newX, double newY);
 	double getDistanceFromSocrates(ActorBaseClass* targetActor);
 	void makeSocratesFullHP();
+	void modifySocratesHP(int modifyAmount);
 	void flameThrowerGoodieEffect();
 	void fungusEffect();
 	
