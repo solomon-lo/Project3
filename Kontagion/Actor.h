@@ -130,6 +130,7 @@ public:
 	Food(double startX, double startY, StudentWorld* inputStudentWorld, int imageID = IID_FOOD, Direction dir = 90, int depth = 1, int inputHP = 1);
 
 	void doSomething();
+
 	virtual bool sprayWillHarm();
 
 	virtual bool flameWillHarm();
@@ -207,6 +208,9 @@ public:
 	double newYAfter3Food(double inputY);
 	int getFoodEaten();
 
+	void checkIfWentOverFoodAndIncrementIfSo();
+	bool checkIfOverlappedWithSocratesAndModifySocratesHP(int socratesHPModifyAmount);
+
 
 	//virtual bool preventsLevelCompleting() const;
 	int getMovementPlanDistance();
@@ -222,6 +226,14 @@ public:
 
 	Salmonella(double startX, double startY, StudentWorld* inputStudentWorld, int imageID = IID_SALMONELLA, Direction dir = 90, int depth = 0, int inputHP = 4);
 	void doSomething();
+};
+
+class EColi : public Bacteria
+{
+public:
+	EColi(double startX, double startY, StudentWorld* inputStudentWorld, int imageID = IID_ECOLI, Direction dir = 90, int depth = 0, int inputHP = 5);
+	void doSomething();
+
 };
 
 #endif // ACTOR_H_

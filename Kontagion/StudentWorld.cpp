@@ -21,24 +21,8 @@ StudentWorld::StudentWorld(string assetPath)
 int StudentWorld::init()
 {
 	//init dirtPiles
-	//int numOfDirtPiles = max(180 - 20 * getLevel(), 20);
-	//for (int i = 0; i < numOfDirtPiles; i++)
-	//{
-	//	int randomX = 0;
-	//	int randomY = 0;
-	//	while (sqrt((randomX - (VIEW_WIDTH / 2)) * (randomX - (VIEW_WIDTH / 2)) + (randomY - (VIEW_HEIGHT / 2)) * (randomY - (VIEW_HEIGHT / 2))) > 120)
-	//	{
 
-	//		randomX = randInt((VIEW_WIDTH / 2) - 120, (VIEW_WIDTH / 2) + 120);
-	//		randomY = randInt((VIEW_HEIGHT / 2) - 120, (VIEW_HEIGHT / 2) + 120);
-	//	}
-	//	DirtPile* newDirtPile = new DirtPile(randomX, randomY, this);
-	//	ActorsVector.push_back(newDirtPile);
-	//}
-	//adding food to the StudentWorld
-
-
-	/*for (int i = 0; i < min(5 * getLevel(), 25); i++) 
+	for (int i = 0; i < min(5 * getLevel(), 25); i++)
 	{
 		int randomFoodX = 0;
 		int randomFoodY = 0;
@@ -64,10 +48,26 @@ int StudentWorld::init()
 			i--;
 			continue;
 		}
-
+		cerr << "declared new food " << randomFoodX << ", " << randomFoodY << endl;
 		Food* newFood = new Food(randomFoodX, randomFoodY, this);
 		addToActorsVector(newFood);
-	}*/
+	}
+
+
+	int numOfDirtPiles = max(180 - 20 * getLevel(), 20);
+	for (int i = 0; i < numOfDirtPiles; i++)
+	{
+		int randomX = 0;
+		int randomY = 0;
+		while (sqrt((randomX - (VIEW_WIDTH / 2)) * (randomX - (VIEW_WIDTH / 2)) + (randomY - (VIEW_HEIGHT / 2)) * (randomY - (VIEW_HEIGHT / 2))) > 120)
+		{
+
+			randomX = randInt((VIEW_WIDTH / 2) - 120, (VIEW_WIDTH / 2) + 120);
+			randomY = randInt((VIEW_HEIGHT / 2) - 120, (VIEW_HEIGHT / 2) + 120);
+		}
+		DirtPile* newDirtPile = new DirtPile(randomX, randomY, this);
+		ActorsVector.push_back(newDirtPile);
+	}
 
 
 	//init a goodie(MUST BE REMOVED, THIS IS FOR TESTING ONLY)
@@ -77,13 +77,20 @@ int StudentWorld::init()
 	//cerr << "getpositionalnagle is" << getPositionalAngle() << endl;
 	//cerr << "newX is" << newX << endl;
 	double goodieY = (VIEW_HEIGHT / 2) + (128 * sin(175 * 1.0 / 360 * 2 * PI));
-	ActorsVector.push_back(new Food(50, 50, this));
-	//ActorsVector.push_back(new Food(95, 118, this));
-	ActorsVector.push_back(new Food(80, 80, this));
-	ActorsVector.push_back(new Food(132, 132, this));
+	//for (int i = 0; i < 2; i++)
+	//{
+	//	ActorsVector.push_back(new Food(50, 50, this));
+	//	//ActorsVector.push_back(new Food(95, 118, this));
+	//	ActorsVector.push_back(new Food(50, 80, this));
+	//	ActorsVector.push_back(new Food(150, 150, this));
+
+	//	//ActorsVector.push_back(new Food(60, 80, this));
+	//	ActorsVector.push_back(new Food(150, 150, this));
+	//}
+
 
 	ActorsVector.push_back(new Salmonella(128, 128, this));
-	ActorsVector.push_back(new Salmonella(75, 75, this));
+	ActorsVector.push_back(new Salmonella(60, 60, this));
 
 	double flameX = (VIEW_WIDTH / 2) + (128 * cos(160 * 1.0 / 360 * 2 * PI));
 	double flameY = (VIEW_HEIGHT / 2) + (128 * sin(160 * 1.0 / 360 * 2 * PI));
@@ -140,7 +147,7 @@ void StudentWorld::removeDeadActors()
 	vector<ActorBaseClass*>::iterator it;
 	for (it = ActorsVector.begin(); it != ActorsVector.end(); )
 	{
-		if ((*it)->getAliveStatus() == false)
+		if ((*it)->getAliveStatus() == false || (*it)->getHP() <= 0)
 		{
 			delete* it;
 			it = ActorsVector.erase(it);
@@ -197,7 +204,7 @@ bool StudentWorld::wentOverSprayableObject(int centerActorX, int centerActorY)
 		double distanceToCenterActor = getEuclideanDistance(centerActorX, centerActorY, (*it)->getX(), (*it)->getY());
 		if (distanceToCenterActor <= SPRITE_RADIUS * 2)
 		{
-			if ((*it)->sprayWillHarm() == true)
+			if ((*it)->sprayWillHarm() == true && (*it)->getHP() > 0)
 			{
 				return true;
 			}
@@ -213,7 +220,7 @@ bool StudentWorld::wentOverFlammableObject(int centerActorX, int centerActorY)
 	{
 
 		double distanceToCenterActor = getEuclideanDistance(centerActorX, centerActorY, (*it)->getX(), (*it)->getY());
-		if (distanceToCenterActor <= SPRITE_RADIUS * 2)
+		if (distanceToCenterActor <= SPRITE_RADIUS * 2 && (*it)->getHP() > 0)
 		{
 			if ((*it)->flameWillHarm() == true)
 			{
@@ -232,7 +239,7 @@ bool StudentWorld::wentOverDirtPile(int centerActorX, int centerActorY)
 	{
 
 		double distanceToCenterActor = getEuclideanDistance(centerActorX, centerActorY, (*it)->getX(), (*it)->getY());
-		if (distanceToCenterActor <= SPRITE_RADIUS)	//DIFFERENT FROM REGULAR OVERLAP
+		if (distanceToCenterActor <= SPRITE_RADIUS && (*it)->getHP() > 0)	//DIFFERENT FROM REGULAR OVERLAP
 		{
 			if ((*it)->blocksBacteriumMovement() == true)
 			{
@@ -257,9 +264,11 @@ bool StudentWorld::wentOverFood(int centerActorX, int centerActorY)
 		double distanceToCenterActor = getEuclideanDistance(centerActorX, centerActorY, (*it)->getX(), (*it)->getY());
 		if (distanceToCenterActor <= SPRITE_RADIUS)
 		{
-			if ((*it)->isEdible() == true)
+			if ((*it)->isEdible() == true && (*it)->getHP() > 0)
 			{
-				(*it)->modifyHP(-1);
+				(*it)->modifyHP(-5);
+				return true;
+
 			}
 		}
 	}
@@ -293,7 +302,6 @@ bool StudentWorld::findFoodWithin128(double bacteriaX, double bacteriaY, double&
 					currentSmallestX = (*it)->getX();
 					currentSmallestY = (*it)->getY();
 				}
-				cerr << "Testing: " << foodX << ", " << foodY << endl;
 			}
 		}
 	}
@@ -306,7 +314,6 @@ bool StudentWorld::findFoodWithin128(double bacteriaX, double bacteriaY, double&
 		
 		foodX = currentSmallestX;
 		foodY = currentSmallestY;
-		cerr << "ended up deciding: " << foodX << ", " << foodY << endl;
 		return true;
 	}
 	

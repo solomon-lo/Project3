@@ -22,7 +22,8 @@ bool ActorBaseClass::getAliveStatus()
 
 void ActorBaseClass::setAsDead()
 {
-	 aliveStatus = false;
+	modifyHP(-999);
+	aliveStatus = false;
 }
 
 StudentWorld* ActorBaseClass::getStudentWorld()
@@ -210,6 +211,7 @@ void DirtPile::doSomething()
 bool DirtPile::sprayWillHarm()
 {
 	modifyHP(-1);
+	setAsDead();
 	return true;
 }
 
@@ -238,10 +240,13 @@ void SprayProjectile::doSomething()
 {
 	//TODO:CHECK FOR OVERLAP
 	SetAsDeadIfLessThan0HP();
+
 	bool temp = getStudentWorld()->wentOverSprayableObject(getX(), getY());
 	if (temp == true)
 	{
 		this->setAsDead();
+		modifyHP(-999);
+		cerr << "set spray as dead, at least ran this->setAsDead and moidfyHP" << endl;
 	}
 	moveAngle(getDirection(), SPRITE_RADIUS * 2);
 	distanceTraveled += SPRITE_RADIUS * 2;
@@ -263,7 +268,7 @@ void FlameProjectile::doSomething()
 {
 	//TODO:CHECK FOR OVERLAP
 	SetAsDeadIfLessThan0HP();
-	bool temp = getStudentWorld()->wentOverSprayableObject(getX(), getY());
+	bool temp = getStudentWorld()->wentOverFlammableObject(getX(), getY());
 	if (temp == true)
 	{
 		this->setAsDead();
@@ -283,7 +288,9 @@ Food::Food(double startX, double startY, StudentWorld* inputStudentWorld, int im
 {}
 
 void Food::doSomething()
-{}
+{
+	SetAsDeadIfLessThan0HP();
+}
 
 bool Food::sprayWillHarm()
 {
@@ -319,14 +326,12 @@ bool ActorBaseClass::checkAliveAndIfOverlapWithSocrates()
 	if (SetAsDeadIfLessThan0HP())
 	{
 		return false;
-		cerr << "set as dead because under 1 HP" << endl;
 	}
 
 	StudentWorld* currentStudentWorldPointer = getStudentWorld();
 	int distanceFromSocrates = currentStudentWorldPointer->getDistanceFromSocrates(this);
 	if (distanceFromSocrates < 2 * SPRITE_RADIUS)
 	{
-		cerr << "overlapped" << endl;
 		return true;
 	}
 
@@ -495,6 +500,27 @@ int Bacteria::getFoodEaten()
 {
 	return foodEaten;
 }
+
+void Bacteria::checkIfWentOverFoodAndIncrementIfSo()
+{
+	if (getStudentWorld()->wentOverFood(getX(), getY()))
+	{
+		cerr << "finally ate food" << endl;
+		modifyFoodEaten(+1);
+		return;
+		cerr << "ate food" << endl;
+		cerr << getFoodEaten() << endl;
+	}
+}
+
+bool Bacteria::checkIfOverlappedWithSocratesAndModifySocratesHP(int socratesHPModifyAmount)
+{
+	if (checkAliveAndIfOverlapWithSocrates())
+	{
+		return true;
+		getStudentWorld()->modifySocratesHP(-1);	//tells socrates to take 1 damage	
+	}
+}
 Salmonella::Salmonella(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth, int inputHP)
 	:Bacteria(startX, startY, inputStudentWorld, imageID, dir, 0, 4)
 {
@@ -506,31 +532,31 @@ void Salmonella::doSomething()
 	bool overlappedWithSocratesThisTick = false;
 	bool hasDividedThisTick = false;
 
-	if (checkAliveAndIfOverlapWithSocrates())
-	{
-		overlappedWithSocratesThisTick = true;
-		getStudentWorld()->modifySocratesHP(-1);	//tells socrates to take 1 damage	
-	}
+	
+	//step 2
+	overlappedWithSocratesThisTick = checkIfOverlappedWithSocratesAndModifySocratesHP(-1);
 
+	//step 3, with step2->5 skip in consideration
 	if (!overlappedWithSocratesThisTick)
 	{
-		if (getFoodEaten() == 3)
+		if (getFoodEaten() >= 3)
 		{
 			int newX = newXAfter3Food(getX());
 			int newY = newYAfter3Food(getY());
 			getStudentWorld()->addToActorsVector(new Salmonella(newX, newY, getStudentWorld()));
-			modifyFoodEaten(-3);
+			modifyFoodEaten(-1 * getFoodEaten());
+			cerr << "after modify food eaten -1 " << getFoodEaten() << endl;
 		}
 		hasDividedThisTick = true;
+	}
+	//step 4, with step2->5 skip in consideration
+	if (!hasDividedThisTick)
+	{
 
-		bool temp = getStudentWorld()->wentOverFood(getX(), getY());
-		if (temp == true)
-		{
-			modifyFoodEaten(1);
-		}
+		checkIfWentOverFoodAndIncrementIfSo();
 	}
 
-
+	//step 5
 	double possibleFoodX;
 	double possibleFoodY;
 	if (getMovementPlanDistance() > 0)
@@ -554,34 +580,36 @@ void Salmonella::doSomething()
 			//modifyMovementPlanDistance(-1);
 		}
 	}
+
+	//step 6
 	else
 	{
-		cerr << "no movementPlanDistance left" << endl;
-		double newFoodX;
-		double newFoodY;
-
-		if (getStudentWorld()->findFoodWithin128(getX(), getY(), newFoodX, newFoodY))
+		
+		if (!hasDividedThisTick)
 		{
-			cerr << "Wihtin 128 of food" << endl;
-			const double PI = 4 * atan(1);
-			double angle = (180.00000 / PI) * atan2(newFoodY - getY(), newFoodX - getX());
-			//setDirection(angle);
-			double newXAfterFoodFound;
-			double newYAfterFoodFound;
-			getPositionInThisDirection(angle, 3, newXAfterFoodFound, newYAfterFoodFound);
-			if ((getStudentWorld()->getEuclideanDistance(newXAfterFoodFound, newYAfterFoodFound, (VIEW_WIDTH / 2), (VIEW_HEIGHT / 2)) > VIEW_DIAMETER) || getStudentWorld()->wentOverDirtPile(newXAfterFoodFound, newYAfterFoodFound))
+			double newFoodX;
+			double newFoodY;
+			if (getStudentWorld()->findFoodWithin128(getX(), getY(), newFoodX, newFoodY))
 			{
-				cerr << "ran inside" << endl;
-				int randomDirection = randInt(0, 359);
-				setDirection(randomDirection);
-				modifyMovementPlanDistance(10 - getMovementPlanDistance());
-			}
-			else
-			{
-				setDirection(angle);
-				moveAngle(getDirection(), 3);
-			}
+				const double PI = 4 * atan(1);
+				double angle = (180.00000 / PI) * atan2(newFoodY - getY(), newFoodX - getX());
+				//setDirection(angle);
+				double newXAfterFoodFound;
+				double newYAfterFoodFound;
+				getPositionInThisDirection(angle, 3, newXAfterFoodFound, newYAfterFoodFound);
+				if ((getStudentWorld()->getEuclideanDistance(newXAfterFoodFound, newYAfterFoodFound, (VIEW_WIDTH / 2), (VIEW_HEIGHT / 2)) > VIEW_DIAMETER) || getStudentWorld()->wentOverDirtPile(newXAfterFoodFound, newYAfterFoodFound))
+				{
+					int randomDirection = randInt(0, 359);
+					setDirection(randomDirection);
+					modifyMovementPlanDistance(10 - getMovementPlanDistance());
+				}
+				else
+				{
+					setDirection(angle);
+					moveAngle(getDirection(), 3);
+				}
 
+			}
 		}
 		else
 		{
@@ -592,5 +620,37 @@ void Salmonella::doSomething()
 	}
 }
 
+EColi::EColi(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth, int inputHP)
+	:Bacteria(startX, startY, inputStudentWorld, imageID, dir, depth, inputHP)
+{}
 
+void EColi::doSomething()
+{
+	SetAsDeadIfLessThan0HP();
+
+	bool overlappedWithSocratesThisTick = false;
+	bool hasDividedThisTick = false;
+
+	overlappedWithSocratesThisTick = checkIfOverlappedWithSocratesAndModifySocratesHP(-4);
+
+	if (!overlappedWithSocratesThisTick)
+	{
+		if (getFoodEaten() >= 3)
+		{
+			int newX = newXAfter3Food(getX());
+			int newY = newYAfter3Food(getY());
+			getStudentWorld()->addToActorsVector(new EColi(newX, newY, getStudentWorld()));
+			modifyFoodEaten(-1 * getFoodEaten());
+		}
+		hasDividedThisTick = true;
+	}
+
+	if (!hasDividedThisTick) 
+	{
+
+		checkIfWentOverFoodAndIncrementIfSo();
+	}
+
+
+}
 
