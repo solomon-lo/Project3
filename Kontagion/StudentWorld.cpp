@@ -36,7 +36,9 @@ int StudentWorld::init()
 	//	ActorsVector.push_back(newDirtPile);
 	//}
 	//adding food to the StudentWorld
-	for (int i = 0; i < min(5 * getLevel(), 25); i++) 
+
+
+	/*for (int i = 0; i < min(5 * getLevel(), 25); i++) 
 	{
 		int randomFoodX = 0;
 		int randomFoodY = 0;
@@ -65,7 +67,9 @@ int StudentWorld::init()
 
 		Food* newFood = new Food(randomFoodX, randomFoodY, this);
 		addToActorsVector(newFood);
-	}
+	}*/
+
+
 	//init a goodie(MUST BE REMOVED, THIS IS FOR TESTING ONLY)
 	const double PI = 4 * atan(1);
 	//THE 90 WILL BE REPLACED WITH A RANDOM NUMBER FROM 0 TO 360
@@ -73,8 +77,13 @@ int StudentWorld::init()
 	//cerr << "getpositionalnagle is" << getPositionalAngle() << endl;
 	//cerr << "newX is" << newX << endl;
 	double goodieY = (VIEW_HEIGHT / 2) + (128 * sin(175 * 1.0 / 360 * 2 * PI));
+	ActorsVector.push_back(new Food(50, 50, this));
+	//ActorsVector.push_back(new Food(95, 118, this));
+	ActorsVector.push_back(new Food(80, 80, this));
+	ActorsVector.push_back(new Food(132, 132, this));
+
 	ActorsVector.push_back(new Salmonella(128, 128, this));
-	ActorsVector.push_back(new Salmonella(128, 126, this));
+	ActorsVector.push_back(new Salmonella(75, 75, this));
 
 	double flameX = (VIEW_WIDTH / 2) + (128 * cos(160 * 1.0 / 360 * 2 * PI));
 	double flameY = (VIEW_HEIGHT / 2) + (128 * sin(160 * 1.0 / 360 * 2 * PI));
@@ -279,9 +288,12 @@ bool StudentWorld::findFoodWithin128(double bacteriaX, double bacteriaY, double&
 		{
 			if ((*it)->isEdible() == true)
 			{
-				if(distanceToActor < (getEuclideanDistance(bacteriaX, bacteriaY, currentSmallestX, currentSmallestY)))
-				currentSmallestX = (*it)->getX();
-				currentSmallestY = (*it)->getY();
+				if (distanceToActor < (getEuclideanDistance(bacteriaX, bacteriaY, currentSmallestX, currentSmallestY)))
+				{
+					currentSmallestX = (*it)->getX();
+					currentSmallestY = (*it)->getY();
+				}
+				cerr << "Testing: " << foodX << ", " << foodY << endl;
 			}
 		}
 	}
@@ -291,8 +303,10 @@ bool StudentWorld::findFoodWithin128(double bacteriaX, double bacteriaY, double&
 	}
 	else
 	{
+		
 		foodX = currentSmallestX;
 		foodY = currentSmallestY;
+		cerr << "ended up deciding: " << foodX << ", " << foodY << endl;
 		return true;
 	}
 	
