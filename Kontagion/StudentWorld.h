@@ -17,10 +17,10 @@ class ActorBaseClass;
 class StudentWorld : public GameWorld
 {
 public:
-    StudentWorld(std::string assetPath);
-    virtual int init();
-    virtual int move();
-    virtual void cleanUp();
+	StudentWorld(std::string assetPath);
+	virtual int init();
+	virtual int move();
+	virtual void cleanUp();
 	~StudentWorld();
 	void addToActorsVector(ActorBaseClass* actorToAdd);
 	//Socrates* getPlayerObject();
@@ -44,7 +44,7 @@ public:
 	void flameThrowerGoodieEffect();
 	void fungusEffect();
 	bool findFoodWithin128(double bacteriaX, double bacteriaY, double& foodX, double& foodY);
-	
+
 private:
 	Socrates* playerObject;
 	std::vector<ActorBaseClass*> ActorsVector;

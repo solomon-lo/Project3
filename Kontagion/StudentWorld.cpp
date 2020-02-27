@@ -14,13 +14,15 @@ GameWorld* createStudentWorld(string assetPath)
 // Students:  Add code to this file, StudentWorld.h, Actor.h and Actor.cpp
 
 StudentWorld::StudentWorld(string assetPath)
-: GameWorld(assetPath)
+	: GameWorld(assetPath)
 {
 }
 
 int StudentWorld::init()
 {
-	//init dirtPiles
+
+	//adding food to the StudentWorld
+
 
 	for (int i = 0; i < min(5 * getLevel(), 25); i++)
 	{
@@ -35,7 +37,6 @@ int StudentWorld::init()
 		vector<ActorBaseClass*>::iterator it;
 		for (it = ActorsVector.begin(); it != ActorsVector.end(); it++)
 		{
-
 			double distanceToCenterActor = getEuclideanDistance(randomFoodX, randomFoodY, (*it)->getX(), (*it)->getY());
 			if ((distanceToCenterActor <= 8)) //|| ((*it)->blocksBacteriumMovement()))
 			{
@@ -48,12 +49,11 @@ int StudentWorld::init()
 			i--;
 			continue;
 		}
-		cerr << "declared new food " << randomFoodX << ", " << randomFoodY << endl;
 		Food* newFood = new Food(randomFoodX, randomFoodY, this);
 		addToActorsVector(newFood);
 	}
 
-
+	//init dirtPiles
 	int numOfDirtPiles = max(180 - 20 * getLevel(), 20);
 	for (int i = 0; i < numOfDirtPiles; i++)
 	{
@@ -77,20 +77,13 @@ int StudentWorld::init()
 	//cerr << "getpositionalnagle is" << getPositionalAngle() << endl;
 	//cerr << "newX is" << newX << endl;
 	double goodieY = (VIEW_HEIGHT / 2) + (128 * sin(175 * 1.0 / 360 * 2 * PI));
-	//for (int i = 0; i < 2; i++)
-	//{
-	//	ActorsVector.push_back(new Food(50, 50, this));
-	//	//ActorsVector.push_back(new Food(95, 118, this));
-	//	ActorsVector.push_back(new Food(50, 80, this));
-	//	ActorsVector.push_back(new Food(150, 150, this));
-
-	//	//ActorsVector.push_back(new Food(60, 80, this));
-	//	ActorsVector.push_back(new Food(150, 150, this));
-	//}
-
+	ActorsVector.push_back(new Food(50, 50, this));
+	//ActorsVector.push_back(new Food(95, 118, this));
+	ActorsVector.push_back(new Food(80, 80, this));
+	ActorsVector.push_back(new Food(132, 132, this));
 
 	ActorsVector.push_back(new Salmonella(128, 128, this));
-	ActorsVector.push_back(new Salmonella(60, 60, this));
+	ActorsVector.push_back(new Salmonella(75, 75, this));
 
 	double flameX = (VIEW_WIDTH / 2) + (128 * cos(160 * 1.0 / 360 * 2 * PI));
 	double flameY = (VIEW_HEIGHT / 2) + (128 * sin(160 * 1.0 / 360 * 2 * PI));
@@ -107,14 +100,14 @@ int StudentWorld::init()
 	playerObject = new Socrates(this);
 
 	//init food items
-    return GWSTATUS_CONTINUE_GAME;
+	return GWSTATUS_CONTINUE_GAME;
 
 }
 
 int StudentWorld::move()
 {
-    // This code is here merely to allow the game to build, run, and terminate after you hit enter.
-    // Notice that the return value GWSTATUS_PLAYER_DIED will cause our framework to end the current level.
+	// This code is here merely to allow the game to build, run, and terminate after you hit enter.
+	// Notice that the return value GWSTATUS_PLAYER_DIED will cause our framework to end the current level.
 	playerObject->doSomething();
 	vector<ActorBaseClass*>::iterator it;
 	for (it = ActorsVector.begin(); it != ActorsVector.end(); it++)
@@ -123,9 +116,9 @@ int StudentWorld::move()
 	}
 
 	removeDeadActors();
-	setGameStatText("Score: " + to_string(getScore()) + " Level: " + to_string(getLevel()) + " Lives: " + to_string(getLives())+ " Health: " + to_string(getPlayerObjectHealth()) + " Sprays: " + to_string(getPlayerObjectSpraysLeft()) + " Flames: " + to_string(getPlayerObjectFlamesLeft()));
+	setGameStatText("Score: " + to_string(getScore()) + " Level: " + to_string(getLevel()) + " Lives: " + to_string(getLives()) + " Health: " + to_string(getPlayerObjectHealth()) + " Sprays: " + to_string(getPlayerObjectSpraysLeft()) + " Flames: " + to_string(getPlayerObjectFlamesLeft()));
 
-    return GWSTATUS_CONTINUE_GAME;
+	return GWSTATUS_CONTINUE_GAME;
 }
 
 double StudentWorld::getPlayerObjectHealth()
@@ -147,7 +140,7 @@ void StudentWorld::removeDeadActors()
 	vector<ActorBaseClass*>::iterator it;
 	for (it = ActorsVector.begin(); it != ActorsVector.end(); )
 	{
-		if ((*it)->getAliveStatus() == false || (*it)->getHP() <= 0)
+		if ((*it)->getAliveStatus() == false)
 		{
 			delete* it;
 			it = ActorsVector.erase(it);
@@ -204,7 +197,7 @@ bool StudentWorld::wentOverSprayableObject(int centerActorX, int centerActorY)
 		double distanceToCenterActor = getEuclideanDistance(centerActorX, centerActorY, (*it)->getX(), (*it)->getY());
 		if (distanceToCenterActor <= SPRITE_RADIUS * 2)
 		{
-			if ((*it)->sprayWillHarm() == true && (*it)->getHP() > 0)
+			if ((*it)->sprayWillHarm() == true)
 			{
 				return true;
 			}
@@ -220,7 +213,7 @@ bool StudentWorld::wentOverFlammableObject(int centerActorX, int centerActorY)
 	{
 
 		double distanceToCenterActor = getEuclideanDistance(centerActorX, centerActorY, (*it)->getX(), (*it)->getY());
-		if (distanceToCenterActor <= SPRITE_RADIUS * 2 && (*it)->getHP() > 0)
+		if (distanceToCenterActor <= SPRITE_RADIUS * 2)
 		{
 			if ((*it)->flameWillHarm() == true)
 			{
@@ -239,7 +232,7 @@ bool StudentWorld::wentOverDirtPile(int centerActorX, int centerActorY)
 	{
 
 		double distanceToCenterActor = getEuclideanDistance(centerActorX, centerActorY, (*it)->getX(), (*it)->getY());
-		if (distanceToCenterActor <= SPRITE_RADIUS && (*it)->getHP() > 0)	//DIFFERENT FROM REGULAR OVERLAP
+		if (distanceToCenterActor <= SPRITE_RADIUS)	//DIFFERENT FROM REGULAR OVERLAP
 		{
 			if ((*it)->blocksBacteriumMovement() == true)
 			{
@@ -264,11 +257,9 @@ bool StudentWorld::wentOverFood(int centerActorX, int centerActorY)
 		double distanceToCenterActor = getEuclideanDistance(centerActorX, centerActorY, (*it)->getX(), (*it)->getY());
 		if (distanceToCenterActor <= SPRITE_RADIUS)
 		{
-			if ((*it)->isEdible() == true && (*it)->getHP() > 0)
+			if ((*it)->isEdible() == true)
 			{
-				(*it)->modifyHP(-5);
-				return true;
-
+				(*it)->modifyHP(-1);
 			}
 		}
 	}
@@ -311,12 +302,12 @@ bool StudentWorld::findFoodWithin128(double bacteriaX, double bacteriaY, double&
 	}
 	else
 	{
-		
+
 		foodX = currentSmallestX;
 		foodY = currentSmallestY;
 		return true;
 	}
-	
+
 
 }
 

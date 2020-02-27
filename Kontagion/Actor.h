@@ -41,7 +41,7 @@ public:
 	virtual void modifyHP(int modifyAmount);
 
 	virtual bool checkAliveAndIfOverlapWithSocrates();
-	
+
 	virtual bool sprayWillHarm();
 	virtual bool flameWillHarm();
 
@@ -92,7 +92,7 @@ public:
 
 	virtual void restoreSocratesFullHP();
 
-	
+
 
 private:
 	int numOfSprayProjectiles;
@@ -130,7 +130,6 @@ public:
 	Food(double startX, double startY, StudentWorld* inputStudentWorld, int imageID = IID_FOOD, Direction dir = 90, int depth = 1, int inputHP = 1);
 
 	void doSomething();
-
 	virtual bool sprayWillHarm();
 
 	virtual bool flameWillHarm();
@@ -144,7 +143,7 @@ public:
 
 	GoodieBaseClass(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir = 0, int depth = 1);
 
-	
+
 
 	virtual void baseActionsIfOverlapWithSocrates(int pointsChange);
 	virtual void trackAndDieIfExceedLifeTimeThenIncTick();
@@ -211,7 +210,6 @@ public:
 	void checkIfWentOverFoodAndIncrementIfSo();
 	bool checkIfOverlappedWithSocratesAndModifySocratesHP(int socratesHPModifyAmount);
 
-
 	//virtual bool preventsLevelCompleting() const;
 	int getMovementPlanDistance();
 	void doSomething() = 0;
@@ -235,5 +233,6 @@ public:
 	void doSomething();
 
 };
+
 
 #endif // ACTOR_H_

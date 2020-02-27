@@ -12,7 +12,7 @@ ActorBaseClass::ActorBaseClass(int imageID, double startX, double startY, Direct
 	:GraphObject(imageID, startX, startY, dir, depth)
 {
 	aliveStatus = true;
-	m_StudentWorld = inputStudentWorld;	
+	m_StudentWorld = inputStudentWorld;
 	HP = inputHP;
 }
 bool ActorBaseClass::getAliveStatus()
@@ -22,7 +22,6 @@ bool ActorBaseClass::getAliveStatus()
 
 void ActorBaseClass::setAsDead()
 {
-	modifyHP(-999);
 	aliveStatus = false;
 }
 
@@ -78,7 +77,7 @@ bool ActorBaseClass::isEdible() const
 ////////////////////////////
 
 
-Socrates::Socrates( StudentWorld* inputStudentWorld, int imageID, Direction dir, double startX, double startY, int depth)
+Socrates::Socrates(StudentWorld* inputStudentWorld, int imageID, Direction dir, double startX, double startY, int depth)
 	: ActorBaseClass(IID_PLAYER, 0, 128, 0, 0, inputStudentWorld, 100)
 {
 	numOfSprayProjectiles = 20;
@@ -159,7 +158,7 @@ void Socrates::doSomething()
 				double shotXDirection = 0;
 				double shotYDirection = 0;
 				getPositionInThisDirection(getDirection(), SPRITE_RADIUS * 2, shotXDirection, shotYDirection);
-				SprayProjectile* shotSpray = new SprayProjectile(shotXDirection, shotYDirection,getStudentWorld() , 4, getDirection(), 1, 1);
+				SprayProjectile* shotSpray = new SprayProjectile(shotXDirection, shotYDirection, getStudentWorld(), 4, getDirection(), 1, 1);
 				numOfSprayProjectiles--;
 				getStudentWorld()->addToActorsVector(shotSpray);
 				getStudentWorld()->playSound(SOUND_PLAYER_SPRAY);
@@ -211,7 +210,6 @@ void DirtPile::doSomething()
 bool DirtPile::sprayWillHarm()
 {
 	modifyHP(-1);
-	setAsDead();
 	return true;
 }
 
@@ -240,13 +238,10 @@ void SprayProjectile::doSomething()
 {
 	//TODO:CHECK FOR OVERLAP
 	SetAsDeadIfLessThan0HP();
-
 	bool temp = getStudentWorld()->wentOverSprayableObject(getX(), getY());
 	if (temp == true)
 	{
 		this->setAsDead();
-		modifyHP(-999);
-		cerr << "set spray as dead, at least ran this->setAsDead and moidfyHP" << endl;
 	}
 	moveAngle(getDirection(), SPRITE_RADIUS * 2);
 	distanceTraveled += SPRITE_RADIUS * 2;
@@ -268,7 +263,7 @@ void FlameProjectile::doSomething()
 {
 	//TODO:CHECK FOR OVERLAP
 	SetAsDeadIfLessThan0HP();
-	bool temp = getStudentWorld()->wentOverFlammableObject(getX(), getY());
+	bool temp = getStudentWorld()->wentOverSprayableObject(getX(), getY());
 	if (temp == true)
 	{
 		this->setAsDead();
@@ -288,9 +283,7 @@ Food::Food(double startX, double startY, StudentWorld* inputStudentWorld, int im
 {}
 
 void Food::doSomething()
-{
-	SetAsDeadIfLessThan0HP();
-}
+{}
 
 bool Food::sprayWillHarm()
 {
@@ -349,7 +342,7 @@ void GoodieBaseClass::baseActionsIfOverlapWithSocrates(int pointsChange)
 
 void GoodieBaseClass::trackAndDieIfExceedLifeTimeThenIncTick()
 {
-	if (lifetimeTicksTracker >= ticksBeforeSetAsDead) 
+	if (lifetimeTicksTracker >= ticksBeforeSetAsDead)
 	{
 		setAsDead();
 	}
@@ -501,6 +494,7 @@ int Bacteria::getFoodEaten()
 	return foodEaten;
 }
 
+
 void Bacteria::checkIfWentOverFoodAndIncrementIfSo()
 {
 	if (getStudentWorld()->wentOverFood(getX(), getY()))
@@ -521,6 +515,8 @@ bool Bacteria::checkIfOverlappedWithSocratesAndModifySocratesHP(int socratesHPMo
 		getStudentWorld()->modifySocratesHP(-1);	//tells socrates to take 1 damage	
 	}
 }
+
+
 Salmonella::Salmonella(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth, int inputHP)
 	:Bacteria(startX, startY, inputStudentWorld, imageID, dir, 0, 4)
 {
@@ -532,31 +528,27 @@ void Salmonella::doSomething()
 	bool overlappedWithSocratesThisTick = false;
 	bool hasDividedThisTick = false;
 
-	
-	//step 2
 	overlappedWithSocratesThisTick = checkIfOverlappedWithSocratesAndModifySocratesHP(-1);
 
-	//step 3, with step2->5 skip in consideration
 	if (!overlappedWithSocratesThisTick)
 	{
-		if (getFoodEaten() >= 3)
+		if (getFoodEaten() == 3)
 		{
 			int newX = newXAfter3Food(getX());
 			int newY = newYAfter3Food(getY());
 			getStudentWorld()->addToActorsVector(new Salmonella(newX, newY, getStudentWorld()));
-			modifyFoodEaten(-1 * getFoodEaten());
-			cerr << "after modify food eaten -1 " << getFoodEaten() << endl;
+			modifyFoodEaten(-3);
 		}
 		hasDividedThisTick = true;
 	}
-	//step 4, with step2->5 skip in consideration
+
 	if (!hasDividedThisTick)
 	{
 
 		checkIfWentOverFoodAndIncrementIfSo();
 	}
 
-	//step 5
+
 	double possibleFoodX;
 	double possibleFoodY;
 	if (getMovementPlanDistance() > 0)
@@ -572,7 +564,7 @@ void Salmonella::doSomething()
 			int newDirection = randInt(0, 359);
 			setDirection(newDirection);
 			modifyMovementPlanDistance(10 - getMovementPlanDistance());
-			
+
 		}
 		else
 		{
@@ -580,35 +572,29 @@ void Salmonella::doSomething()
 			//modifyMovementPlanDistance(-1);
 		}
 	}
-
-	//step 6
 	else
 	{
-		
-		if (!hasDividedThisTick)
-		{
-			double newFoodX;
-			double newFoodY;
-			if (getStudentWorld()->findFoodWithin128(getX(), getY(), newFoodX, newFoodY))
-			{
-				const double PI = 4 * atan(1);
-				double angle = (180.00000 / PI) * atan2(newFoodY - getY(), newFoodX - getX());
-				//setDirection(angle);
-				double newXAfterFoodFound;
-				double newYAfterFoodFound;
-				getPositionInThisDirection(angle, 3, newXAfterFoodFound, newYAfterFoodFound);
-				if ((getStudentWorld()->getEuclideanDistance(newXAfterFoodFound, newYAfterFoodFound, (VIEW_WIDTH / 2), (VIEW_HEIGHT / 2)) > VIEW_DIAMETER) || getStudentWorld()->wentOverDirtPile(newXAfterFoodFound, newYAfterFoodFound))
-				{
-					int randomDirection = randInt(0, 359);
-					setDirection(randomDirection);
-					modifyMovementPlanDistance(10 - getMovementPlanDistance());
-				}
-				else
-				{
-					setDirection(angle);
-					moveAngle(getDirection(), 3);
-				}
 
+		double newFoodX;
+		double newFoodY;
+		if (getStudentWorld()->findFoodWithin128(getX(), getY(), newFoodX, newFoodY))
+		{
+			const double PI = 4 * atan(1);
+			double angle = (180.00000 / PI) * atan2(newFoodY - getY(), newFoodX - getX());
+			//setDirection(angle);
+			double newXAfterFoodFound;
+			double newYAfterFoodFound;
+			getPositionInThisDirection(angle, 3, newXAfterFoodFound, newYAfterFoodFound);
+			if ((getStudentWorld()->getEuclideanDistance(newXAfterFoodFound, newYAfterFoodFound, (VIEW_WIDTH / 2), (VIEW_HEIGHT / 2)) > VIEW_DIAMETER) || getStudentWorld()->wentOverDirtPile(newXAfterFoodFound, newYAfterFoodFound))
+			{
+				int randomDirection = randInt(0, 359);
+				setDirection(randomDirection);
+				modifyMovementPlanDistance(10 - getMovementPlanDistance());
+			}
+			else
+			{
+				setDirection(angle);
+				moveAngle(getDirection(), 3);
 			}
 		}
 		else
@@ -619,7 +605,6 @@ void Salmonella::doSomething()
 		}
 	}
 }
-
 EColi::EColi(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth, int inputHP)
 	:Bacteria(startX, startY, inputStudentWorld, imageID, dir, depth, inputHP)
 {}
@@ -645,12 +630,10 @@ void EColi::doSomething()
 		hasDividedThisTick = true;
 	}
 
-	if (!hasDividedThisTick) 
+	if (!hasDividedThisTick)
 	{
 
 		checkIfWentOverFoodAndIncrementIfSo();
 	}
-
-
 }
 
