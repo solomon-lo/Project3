@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <math.h>
 using namespace std;
 //class ActorBaseClass;
 
@@ -110,10 +111,10 @@ int StudentWorld::init()
 	ActorsVector.push_back(new Food(80, 80, this));
 	ActorsVector.push_back(new Food(132, 132, this));
 
-	ActorsVector.push_back(new Salmonella(128, 128, this));
-	ActorsVector.push_back(new Salmonella(75, 75, this));
+	ActorsVector.push_back(new AggressiveSalmonella(128, 128, this));
+	//ActorsVector.push_back(new AggressiveSalmonella(75, 75, this));
 
-	ActorsVector.push_back(new Salmonella(100, 100, this));
+	//ActorsVector.push_back(new AggressiveSalmonella(100, 100, this));
 
 	double flameX = (VIEW_WIDTH / 2) + (128 * cos(160 * 1.0 / 360 * 2 * PI));
 	double flameY = (VIEW_HEIGHT / 2) + (128 * sin(160 * 1.0 / 360 * 2 * PI));
@@ -193,8 +194,8 @@ double StudentWorld::getEuclideanDistance(double baseX, double baseY, double new
 
 double StudentWorld::getDistanceFromSocrates(ActorBaseClass* targetActor)
 {
-	int actorX = targetActor->getX();
-	int actorY = targetActor->getY();
+	double actorX = targetActor->getX();
+	double actorY = targetActor->getY();
 	return getEuclideanDistance(playerObject->getX(), playerObject->getY(), actorX, actorY);
 }
 
@@ -290,6 +291,7 @@ bool StudentWorld::wentOverFood(int centerActorX, int centerActorY)
 			if ((*it)->isEdible() == true)
 			{
 				(*it)->modifyHP(-1);
+				(*it)->setAsDead();
 				return true;
 			}
 		}

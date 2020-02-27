@@ -3,7 +3,7 @@
 #include "GameConstants.h"
 #include <iostream>
 #include <cmath>
-#include<math.h>
+#include <math.h>
 using namespace std;
 
 class StudentWorld;
@@ -83,9 +83,9 @@ Pit::Pit(double startX, double startY, StudentWorld* inputStudentWorld, int imag
 
 void Pit::doSomething()
 {
-	if (RegularSalmonellaInventory + AggressiveSalmonellaInventory + EColiInventory == 0)
+	if ((RegularSalmonellaInventory + AggressiveSalmonellaInventory + EColiInventory) == 0)
 	{
-		modifyHP(-1);
+		modifyHP(-4);
 		setAsDead();
 	}
 
@@ -94,22 +94,22 @@ void Pit::doSomething()
 	if (randomNumberFromOneToFifty == 1)
 	{
 		bool bacteriaSpawned = false;
-		int chooseBacteriaToSpawn = randInt(1, 3);
 		while (!bacteriaSpawned)
 		{
-			if ((randomNumberFromOneToFifty == 1) && RegularSalmonellaInventory > 0)
+			int chooseBacteriaToSpawn = randInt(1, 3);
+			if ((chooseBacteriaToSpawn == 1) && RegularSalmonellaInventory > 0)
 			{
 				getStudentWorld()->addToActorsVector(new Salmonella(getX(), getY(), getStudentWorld()));
 				RegularSalmonellaInventory--;
 				bacteriaSpawned = true;
 			}
-			if ((randomNumberFromOneToFifty == 2) && AggressiveSalmonellaInventory > 0)
+			if ((chooseBacteriaToSpawn == 2) && AggressiveSalmonellaInventory > 0)
 			{
 				getStudentWorld()->addToActorsVector(new AggressiveSalmonella(getX(), getY(), getStudentWorld()));
 				AggressiveSalmonellaInventory--;
 				bacteriaSpawned = true;
 			}
-			if ((randomNumberFromOneToFifty == 3) && EColiInventory > 0)
+			if ((chooseBacteriaToSpawn == 3) && EColiInventory > 0)
 			{
 				getStudentWorld()->addToActorsVector(new EColi(getX(), getY(), getStudentWorld()));
 				EColiInventory--;
@@ -345,8 +345,9 @@ bool Food::flameWillHarm()
 	return false;
 }
 
-bool Food::isEdible() const
+bool Food::isEdible()
 {
+	setAsDead();
 	return true;
 }
 GoodieBaseClass::GoodieBaseClass(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth)
@@ -616,7 +617,7 @@ void Bacteria::lookAndGoAfterFoodWithin128()
 	}
 }
 AggressiveSalmonella::AggressiveSalmonella(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth, int inputHP)
-	:Bacteria(startX, startY, inputStudentWorld, dir, depth, inputHP)
+	:Bacteria(startX, startY, inputStudentWorld, imageID, dir, depth, inputHP)
 {}
 
 void AggressiveSalmonella::doSomething()
@@ -626,12 +627,14 @@ void AggressiveSalmonella::doSomething()
 	bool chasedAfterSocrates = false;
 	bool overlappedWithSocratesThisTick = false;
 	bool hasDividedThisTick = false;
-
-	if (getStudentWorld()->getDistanceFromSocrates(this) <= 72)
+	double tempXDistance;
+	double tempYDistance;
+	
+	if (getStudentWorld()->getDistanceFromSocrates(this) <= 72) 
 	{
-		chasedAfterSocrates = true;
-		double tempSocratesX;
-		double tempSocratesY;
+
+		double tempSocratesX = 1;
+		double tempSocratesY = 1;
 		if(getStudentWorld()->findSocratesWithinDistance(getX(), getY(), tempSocratesX, tempSocratesY, 72))
 		{
 			const double PI = 4 * atan(1);
@@ -685,8 +688,7 @@ void AggressiveSalmonella::doSomething()
 
 Salmonella::Salmonella(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth, int inputHP)
 	:Bacteria(startX, startY, inputStudentWorld, imageID, dir, 0, 4)
-{
-}
+{}
 void Salmonella::doSomething()
 {
 	SetAsDeadIfLessThan0HP();

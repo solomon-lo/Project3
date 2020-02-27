@@ -7,6 +7,8 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <cmath>
+#include <math.h>
 
 class Socrates;
 class ActorBaseClass;
