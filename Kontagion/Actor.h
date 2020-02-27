@@ -57,6 +57,17 @@ private:
 	double HP;
 };
 
+
+class Pit : public ActorBaseClass
+{
+public:
+	Pit(double startX, double startY, StudentWorld* inputStudentWorld, int imageID = IID_PIT, Direction dir = 0, int depth = 1);
+	void doSomething();
+private:
+	int RegularSalmonellaInventory;
+	int AggressiveSalmonellaInventory;
+	int EColiInventory;
+};
 class DirtPile : public ActorBaseClass
 {
 public:
@@ -206,6 +217,10 @@ public:
 	double newXAfter3Food(double inputX);
 	double newYAfter3Food(double inputY);
 	int getFoodEaten();
+
+	void movementPlanMoveForward3AvoidDirt();
+
+	void lookAndGoAfterFoodWithin128();
 
 	void checkIfWentOverFoodAndIncrementIfSo();
 	bool checkIfOverlappedWithSocratesAndModifySocratesHP(int socratesHPModifyAmount);

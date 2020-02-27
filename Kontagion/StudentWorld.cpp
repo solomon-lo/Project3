@@ -20,10 +20,38 @@ StudentWorld::StudentWorld(string assetPath)
 
 int StudentWorld::init()
 {
+	//adding pits to the StudentWorld
+	for (int i = 0; i < getLevel(); i++)
+	{
+		int randomPitX = 0;
+		int randomPitY = 0;
+		while (getEuclideanDistance(randomPitX, randomPitY, (VIEW_WIDTH / 2), (VIEW_HEIGHT / 2)) > 120.00)
+		{
+			randomPitX = randInt((VIEW_WIDTH / 2) - 120, (VIEW_WIDTH / 2) + 120);
+			randomPitY = randInt((VIEW_HEIGHT / 2) - 120, (VIEW_HEIGHT / 2) + 120);
+		}
+		bool overlappedWithSomething = false;
+		vector<ActorBaseClass*>::iterator it;
+		for (it = ActorsVector.begin(); it != ActorsVector.end(); it++)
+		{
+			double distanceToCenterActor = getEuclideanDistance(randomPitX, randomPitY, (*it)->getX(), (*it)->getY());
+			if ((distanceToCenterActor <= 8)) //|| ((*it)->blocksBacteriumMovement()))
+			{
+				overlappedWithSomething = true;
+				break;
+			}
+		}
+		if (overlappedWithSomething)
+		{
+			i--;
+			continue;
+		}
+		Pit* newPit = new Pit(randomPitX, randomPitY, this);
+		addToActorsVector(newPit);
+	}
+
 
 	//adding food to the StudentWorld
-
-
 	for (int i = 0; i < min(5 * getLevel(), 25); i++)
 	{
 		int randomFoodX = 0;
@@ -84,6 +112,8 @@ int StudentWorld::init()
 
 	ActorsVector.push_back(new Salmonella(128, 128, this));
 	ActorsVector.push_back(new Salmonella(75, 75, this));
+
+	ActorsVector.push_back(new Salmonella(100, 100, this));
 
 	double flameX = (VIEW_WIDTH / 2) + (128 * cos(160 * 1.0 / 360 * 2 * PI));
 	double flameY = (VIEW_HEIGHT / 2) + (128 * sin(160 * 1.0 / 360 * 2 * PI));

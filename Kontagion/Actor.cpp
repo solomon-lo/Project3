@@ -72,6 +72,54 @@ bool ActorBaseClass::isEdible() const
 {
 	return false;
 }
+
+Pit::Pit(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth)
+	:ActorBaseClass(imageID, startX, startY, dir, depth, inputStudentWorld)
+{
+	RegularSalmonellaInventory = 5;
+	AggressiveSalmonellaInventory = 3;
+	EColiInventory = 2;
+}
+
+void Pit::doSomething()
+{
+	if (RegularSalmonellaInventory + AggressiveSalmonellaInventory + EColiInventory == 0)
+	{
+		modifyHP(-1);
+		setAsDead();
+	}
+
+	SetAsDeadIfLessThan0HP();
+	int randomNumberFromOneToFifty = randInt(1, 50);
+	if (randomNumberFromOneToFifty == 1)
+	{
+		bool bacteriaSpawned = false;
+		int chooseBacteriaToSpawn = randInt(1, 3);
+		while (!bacteriaSpawned)
+		{
+			if ((randomNumberFromOneToFifty == 1) && RegularSalmonellaInventory > 0)
+			{
+				getStudentWorld()->addToActorsVector(new Salmonella(getX(), getY(), getStudentWorld()));
+				RegularSalmonellaInventory--;
+				bacteriaSpawned = true;
+			}
+			if ((randomNumberFromOneToFifty == 2) && AggressiveSalmonellaInventory > 0)
+			{
+				getStudentWorld()->addToActorsVector(new AggressiveSalmonella(getX(), getY(), getStudentWorld()));
+				AggressiveSalmonellaInventory--;
+				bacteriaSpawned = true;
+			}
+			if ((randomNumberFromOneToFifty == 3) && EColiInventory > 0)
+			{
+				getStudentWorld()->addToActorsVector(new EColi(getX(), getY(), getStudentWorld()));
+				EColiInventory--;
+				bacteriaSpawned = true;
+			}
+		}
+		getStudentWorld()->playSound(SOUND_BACTERIUM_BORN);
+	}
+
+}
 ////////////////////////////
 //SOCRATES IMPLEMENTATIONS
 ////////////////////////////
@@ -283,7 +331,9 @@ Food::Food(double startX, double startY, StudentWorld* inputStudentWorld, int im
 {}
 
 void Food::doSomething()
-{}
+{
+
+}
 
 bool Food::sprayWillHarm()
 {
@@ -512,7 +562,60 @@ bool Bacteria::checkIfOverlappedWithSocratesAndModifySocratesHP(int socratesHPMo
 	}
 }
 
-AggressiveSalmonella::AggressiveSalmonella(double startX, double startY, StudentWorld* inputStudentWorld, int imageID = IID_SALMONELLA, Direction dir = 90, int depth = 0, int inputHP = 10)
+void Bacteria::movementPlanMoveForward3AvoidDirt()
+{
+	modifyMovementPlanDistance(-1);
+	double tempX;
+	double tempY;
+	getPositionInThisDirection(getDirection(), 3, tempX, tempY);
+
+	//following if statement checks to see if it DOESN'T go outside of circle or go over dirtpile
+	if ((getStudentWorld()->getEuclideanDistance(tempX, tempY, (VIEW_WIDTH / 2), (VIEW_HEIGHT / 2)) > VIEW_DIAMETER) || (getStudentWorld()->wentOverDirtPile(tempX, tempY)))
+	{
+		int newDirection = randInt(0, 359);
+		setDirection(newDirection);
+		modifyMovementPlanDistance(10 - getMovementPlanDistance());
+
+	}
+	else
+	{
+		moveAngle(getDirection(), 3);
+		//modifyMovementPlanDistance(-1);
+	}
+}
+
+void Bacteria::lookAndGoAfterFoodWithin128()
+{
+	double newFoodX;
+	double newFoodY;
+	if (getStudentWorld()->findFoodWithin128(getX(), getY(), newFoodX, newFoodY))
+	{
+		const double PI = 4 * atan(1);
+		double angle = (180.00000 / PI) * atan2(newFoodY - getY(), newFoodX - getX());
+		//setDirection(angle);
+		double newXAfterFoodFound;
+		double newYAfterFoodFound;
+		getPositionInThisDirection(angle, 3, newXAfterFoodFound, newYAfterFoodFound);
+		if ((getStudentWorld()->getEuclideanDistance(newXAfterFoodFound, newYAfterFoodFound, (VIEW_WIDTH / 2), (VIEW_HEIGHT / 2)) > VIEW_DIAMETER) || getStudentWorld()->wentOverDirtPile(newXAfterFoodFound, newYAfterFoodFound))
+		{
+			int randomDirection = randInt(0, 359);
+			setDirection(randomDirection);
+			modifyMovementPlanDistance(10 - getMovementPlanDistance());
+		}
+		else
+		{
+			setDirection(angle);
+			moveAngle(getDirection(), 3);
+		}
+	}
+	else
+	{
+		int randomDirection = randInt(0, 359);
+		setDirection(randomDirection);
+		modifyMovementPlanDistance(10 - getMovementPlanDistance());
+	}
+}
+AggressiveSalmonella::AggressiveSalmonella(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth, int inputHP)
 	:Bacteria(startX, startY, inputStudentWorld, dir, depth, inputHP)
 {}
 
@@ -558,10 +661,26 @@ void AggressiveSalmonella::doSomething()
 		hasDividedThisTick = true;
 	}
 
+
+	//step 5
 	if (!overlappedWithSocratesThisTick && !hasDividedThisTick)
 	{
 		checkIfWentOverFoodAndIncrementIfSo();
 	}
+
+	//step 6
+
+	if (getMovementPlanDistance() > 0 && !chasedAfterSocrates)
+	{
+		movementPlanMoveForward3AvoidDirt();
+	}
+	else
+	{
+		//step 7
+		lookAndGoAfterFoodWithin128();
+	}
+
+	//step 7
 }
 
 Salmonella::Salmonella(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth, int inputHP)
@@ -600,56 +719,11 @@ void Salmonella::doSomething()
 	double possibleFoodY;
 	if (getMovementPlanDistance() > 0)
 	{
-		modifyMovementPlanDistance(-1);
-		double tempX;
-		double tempY;
-		getPositionInThisDirection(getDirection(), 3, tempX, tempY);
-
-		//following if statement checks to see if it DOESN'T go outside of circle or go over dirtpile
-		if ((getStudentWorld()->getEuclideanDistance(tempX, tempY, (VIEW_WIDTH / 2), (VIEW_HEIGHT / 2)) > VIEW_DIAMETER) || (getStudentWorld()->wentOverDirtPile(tempX, tempY)))
-		{
-			int newDirection = randInt(0, 359);
-			setDirection(newDirection);
-			modifyMovementPlanDistance(10 - getMovementPlanDistance());
-
-		}
-		else
-		{
-			moveAngle(getDirection(), 3);
-			//modifyMovementPlanDistance(-1);
-		}
+		movementPlanMoveForward3AvoidDirt();
 	}
 	else
 	{
-
-		double newFoodX;
-		double newFoodY;
-		if (getStudentWorld()->findFoodWithin128(getX(), getY(), newFoodX, newFoodY))
-		{
-			const double PI = 4 * atan(1);
-			double angle = (180.00000 / PI) * atan2(newFoodY - getY(), newFoodX - getX());
-			//setDirection(angle);
-			double newXAfterFoodFound;
-			double newYAfterFoodFound;
-			getPositionInThisDirection(angle, 3, newXAfterFoodFound, newYAfterFoodFound);
-			if ((getStudentWorld()->getEuclideanDistance(newXAfterFoodFound, newYAfterFoodFound, (VIEW_WIDTH / 2), (VIEW_HEIGHT / 2)) > VIEW_DIAMETER) || getStudentWorld()->wentOverDirtPile(newXAfterFoodFound, newYAfterFoodFound))
-			{
-				int randomDirection = randInt(0, 359);
-				setDirection(randomDirection);
-				modifyMovementPlanDistance(10 - getMovementPlanDistance());
-			}
-			else
-			{
-				setDirection(angle);
-				moveAngle(getDirection(), 3);
-			}
-		}
-		else
-		{
-			int randomDirection = randInt(0, 359);
-			setDirection(randomDirection);
-			modifyMovementPlanDistance(10 - getMovementPlanDistance());
-		}
+		lookAndGoAfterFoodWithin128();
 	}
 }
 
