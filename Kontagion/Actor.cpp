@@ -471,11 +471,13 @@ double Bacteria::newYAfter3Food(double inputY)
 
 bool Bacteria::sprayWillHarm()
 {
+	modifyHP(-2);
 	return true;
 }
 
 bool Bacteria::flameWillHarm()
 {
+	modifyHP(-5);
 	return true;
 }
 
@@ -520,12 +522,14 @@ void Salmonella::doSomething()
 			modifyFoodEaten(-3);
 		}
 		hasDividedThisTick = true;
+
+		bool temp = getStudentWorld()->wentOverFood(getX(), getY());
+		if (temp == true)
+		{
+			modifyFoodEaten(1);
+		}
 	}
-	bool temp = getStudentWorld()->wentOverFood(getX(), getY());
-	if (temp == true)
-	{
-		modifyFoodEaten(1);
-	}
+
 
 	double possibleFoodX;
 	double possibleFoodY;
@@ -537,38 +541,45 @@ void Salmonella::doSomething()
 		getPositionInThisDirection(getDirection(), 3, tempX, tempY);
 
 		//following if statement checks to see if it DOESN'T go outside of circle or go over dirtpile
-		if (!(getStudentWorld()->getEuclideanDistance(tempX, tempY, VIEW_WIDTH / 2, VIEW_HEIGHT / 2) > VIEW_DIAMETER) && !(getStudentWorld()->wentOverDirtPile(tempX, tempY)))
-		{
-			moveAngle(getDirection(), 3);
-		}
-		else
+		if ((getStudentWorld()->getEuclideanDistance(tempX, tempY, (VIEW_WIDTH / 2), (VIEW_HEIGHT / 2)) > VIEW_DIAMETER) || (getStudentWorld()->wentOverDirtPile(tempX, tempY)))
 		{
 			int newDirection = randInt(0, 359);
 			setDirection(newDirection);
 			modifyMovementPlanDistance(10 - getMovementPlanDistance());
+			
+		}
+		else
+		{
+			moveAngle(getDirection(), 3);
+			//modifyMovementPlanDistance(-1);
 		}
 	}
 	else
 	{
+		cerr << "no movementPlanDistance left" << endl;
 		double newFoodX;
 		double newFoodY;
 
-		//food or socrates is front value
-//bacteria is back value
 		if (getStudentWorld()->findFoodWithin128(getX(), getY(), newFoodX, newFoodY))
 		{
+			cerr << "Wihtin 128 of food" << endl;
 			const double PI = 4 * atan(1);
-			double angle = (180.00000 / PI) * atan2(newFoodX - getX(), newFoodY - getY());
-			setDirection(angle);
+			double angle = (180.00000 / PI) * atan2(newFoodY - getY(), newFoodX - getX());
+			//setDirection(angle);
 			double newXAfterFoodFound;
 			double newYAfterFoodFound;
-			getPositionInThisDirection(getDirection(), 3, newXAfterFoodFound, newYAfterFoodFound);
-			if (getStudentWorld()->wentOverDirtPile(newXAfterFoodFound, newYAfterFoodFound))
+			getPositionInThisDirection(angle, 3, newXAfterFoodFound, newYAfterFoodFound);
+			if ((getStudentWorld()->getEuclideanDistance(newXAfterFoodFound, newYAfterFoodFound, (VIEW_WIDTH / 2), (VIEW_HEIGHT / 2)) > VIEW_DIAMETER) || getStudentWorld()->wentOverDirtPile(newXAfterFoodFound, newYAfterFoodFound))
 			{
+				cerr << "ran inside" << endl;
 				int randomDirection = randInt(0, 359);
 				setDirection(randomDirection);
 				modifyMovementPlanDistance(10 - getMovementPlanDistance());
-				return;
+			}
+			else
+			{
+				setDirection(angle);
+				moveAngle(getDirection(), 3);
 			}
 
 		}
@@ -577,7 +588,6 @@ void Salmonella::doSomething()
 			int randomDirection = randInt(0, 359);
 			setDirection(randomDirection);
 			modifyMovementPlanDistance(10 - getMovementPlanDistance());
-			return;
 		}
 	}
 }

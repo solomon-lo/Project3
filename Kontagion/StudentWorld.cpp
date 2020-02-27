@@ -21,22 +21,51 @@ StudentWorld::StudentWorld(string assetPath)
 int StudentWorld::init()
 {
 	//init dirtPiles
-	int numOfDirtPiles = max(180 - 20 * getLevel(), 20);
-	for (int i = 0; i < numOfDirtPiles; i++)
+	//int numOfDirtPiles = max(180 - 20 * getLevel(), 20);
+	//for (int i = 0; i < numOfDirtPiles; i++)
+	//{
+	//	int randomX = 0;
+	//	int randomY = 0;
+	//	while (sqrt((randomX - (VIEW_WIDTH / 2)) * (randomX - (VIEW_WIDTH / 2)) + (randomY - (VIEW_HEIGHT / 2)) * (randomY - (VIEW_HEIGHT / 2))) > 120)
+	//	{
+
+	//		randomX = randInt((VIEW_WIDTH / 2) - 120, (VIEW_WIDTH / 2) + 120);
+	//		randomY = randInt((VIEW_HEIGHT / 2) - 120, (VIEW_HEIGHT / 2) + 120);
+	//	}
+	//	DirtPile* newDirtPile = new DirtPile(randomX, randomY, this);
+	//	ActorsVector.push_back(newDirtPile);
+	//}
+	//adding food to the StudentWorld
+	for (int i = 0; i < min(5 * getLevel(), 25); i++) 
 	{
-		int randomX = 0;
-		int randomY = 0;
-		while (sqrt((randomX - (VIEW_WIDTH / 2)) * (randomX - (VIEW_WIDTH / 2)) + (randomY - (VIEW_HEIGHT / 2)) * (randomY - (VIEW_HEIGHT / 2))) > 120)
+		int randomFoodX = 0;
+		int randomFoodY = 0;
+		while (getEuclideanDistance(randomFoodX, randomFoodY, (VIEW_WIDTH / 2), (VIEW_HEIGHT / 2)) > 120.00)
+		{
+			randomFoodX = randInt((VIEW_WIDTH / 2) - 120, (VIEW_WIDTH / 2) + 120);
+			randomFoodY = randInt((VIEW_HEIGHT / 2) - 120, (VIEW_HEIGHT / 2) + 120);
+		}
+		bool overlappedWithSomething = false;
+		vector<ActorBaseClass*>::iterator it;
+		for (it = ActorsVector.begin(); it != ActorsVector.end(); it++)
 		{
 
-			randomX = randInt((VIEW_WIDTH / 2) - 120, (VIEW_WIDTH / 2) + 120);
-			randomY = randInt((VIEW_HEIGHT / 2) - 120, (VIEW_HEIGHT / 2) + 120);
+			double distanceToCenterActor = getEuclideanDistance(randomFoodX, randomFoodY, (*it)->getX(), (*it)->getY());
+			if ((distanceToCenterActor <= 8)) //|| ((*it)->blocksBacteriumMovement()))
+			{
+				overlappedWithSomething = true;
+				break;
+			}
 		}
-		DirtPile* newDirtPile = new DirtPile(randomX, randomY, this);
-		ActorsVector.push_back(newDirtPile);
+		if (overlappedWithSomething)
+		{
+			i--;
+			continue;
+		}
+
+		Food* newFood = new Food(randomFoodX, randomFoodY, this);
+		addToActorsVector(newFood);
 	}
-
-
 	//init a goodie(MUST BE REMOVED, THIS IS FOR TESTING ONLY)
 	const double PI = 4 * atan(1);
 	//THE 90 WILL BE REPLACED WITH A RANDOM NUMBER FROM 0 TO 360
@@ -45,6 +74,7 @@ int StudentWorld::init()
 	//cerr << "newX is" << newX << endl;
 	double goodieY = (VIEW_HEIGHT / 2) + (128 * sin(175 * 1.0 / 360 * 2 * PI));
 	ActorsVector.push_back(new Salmonella(128, 128, this));
+	ActorsVector.push_back(new Salmonella(128, 126, this));
 
 	double flameX = (VIEW_WIDTH / 2) + (128 * cos(160 * 1.0 / 360 * 2 * PI));
 	double flameY = (VIEW_HEIGHT / 2) + (128 * sin(160 * 1.0 / 360 * 2 * PI));
@@ -240,23 +270,33 @@ bool StudentWorld::isThisCoordinateFilled(double testX, double textY)
 bool StudentWorld::findFoodWithin128(double bacteriaX, double bacteriaY, double& foodX, double& foodY)
 {
 	vector<ActorBaseClass*>::iterator it;
+	double currentSmallestX = 9999999;
+	double currentSmallestY = 9999999;
 	for (it = ActorsVector.begin(); it != ActorsVector.end(); it++)
 	{
-
 		double distanceToActor = getEuclideanDistance(bacteriaX, bacteriaY, (*it)->getX(), (*it)->getY());
 		if (distanceToActor <= 128)
 		{
 			if ((*it)->isEdible() == true)
 			{
-				foodX = (*it)->getX();
-				foodY = (*it)->getY();
-				return true;
+				if(distanceToActor < (getEuclideanDistance(bacteriaX, bacteriaY, currentSmallestX, currentSmallestY)))
+				currentSmallestX = (*it)->getX();
+				currentSmallestY = (*it)->getY();
 			}
 		}
 	}
-	foodX = -1;
-	foodY = -1;
-	return false;
+	if (currentSmallestX == currentSmallestY == 9999999)
+	{
+		return false;
+	}
+	else
+	{
+		foodX = currentSmallestX;
+		foodY = currentSmallestY;
+		return true;
+	}
+	
+
 }
 
 
