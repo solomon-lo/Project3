@@ -226,6 +226,13 @@ public:
 	void doSomething();
 };
 
+class AggressiveSalmonella : public Bacteria
+{
+public:
+	AggressiveSalmonella(double startX, double startY, StudentWorld* inputStudentWorld, int imageID = IID_SALMONELLA, Direction dir = 90, int depth = 0, int inputHP = 10);
+	void doSomething();
+};
+
 class EColi : public Bacteria
 {
 public:

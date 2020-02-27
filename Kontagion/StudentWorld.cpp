@@ -69,7 +69,7 @@ int StudentWorld::init()
 		ActorsVector.push_back(newDirtPile);
 	}
 
-
+	addToActorsVector(new EColi(120, 120, this));
 	//init a goodie(MUST BE REMOVED, THIS IS FOR TESTING ONLY)
 	const double PI = 4 * atan(1);
 	//THE 90 WILL BE REPLACED WITH A RANDOM NUMBER FROM 0 TO 360
@@ -313,7 +313,7 @@ bool StudentWorld::findSocratesWithin256(double bacteriaX, double bacteriaY, dou
 {
 	double currentSocratesX = playerObject->getX();
 	double currentSocratesY = playerObject->getY();
-	if (getEuclideanDistance((bacteriaX, bacteriaY, currentSocratesX, currentSocratesY) <= 256))
+	if (getEuclideanDistance(bacteriaX, bacteriaY, currentSocratesX, currentSocratesY) <= 256)
 	{
 		SocratesX = currentSocratesX;
 		SocratesY = currentSocratesY;

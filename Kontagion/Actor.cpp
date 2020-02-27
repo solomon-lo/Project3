@@ -316,13 +316,8 @@ GoodieBaseClass::GoodieBaseClass(double startX, double startY, StudentWorld* inp
 bool ActorBaseClass::checkAliveAndIfOverlapWithSocrates()
 
 {
-	if (SetAsDeadIfLessThan0HP())
-	{
-		return false;
-	}
 
-	StudentWorld* currentStudentWorldPointer = getStudentWorld();
-	int distanceFromSocrates = currentStudentWorldPointer->getDistanceFromSocrates(this);
+	int distanceFromSocrates = getStudentWorld()->getDistanceFromSocrates(this);
 	if (distanceFromSocrates < 2 * SPRITE_RADIUS)
 	{
 		return true;
@@ -511,11 +506,20 @@ bool Bacteria::checkIfOverlappedWithSocratesAndModifySocratesHP(int socratesHPMo
 {
 	if (checkAliveAndIfOverlapWithSocrates())
 	{
-		return true;
-		getStudentWorld()->modifySocratesHP(-1);	//tells socrates to take 1 damage	
+
+		getStudentWorld()->modifySocratesHP(socratesHPModifyAmount);
+		return true;	//tells socrates to take 1 damage	
 	}
 }
 
+AggressiveSalmonella::AggressiveSalmonella(double startX, double startY, StudentWorld* inputStudentWorld, int imageID = IID_SALMONELLA, Direction dir = 90, int depth = 0, int inputHP = 10)
+	:Bacteria(startX, startY, inputStudentWorld, dir, depth, inputHP)
+{}
+
+void AggressiveSalmonella::doSomething()
+{
+	
+}
 
 Salmonella::Salmonella(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth, int inputHP)
 	:Bacteria(startX, startY, inputStudentWorld, imageID, dir, 0, 4)
@@ -605,6 +609,8 @@ void Salmonella::doSomething()
 		}
 	}
 }
+
+
 EColi::EColi(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth, int inputHP)
 	:Bacteria(startX, startY, inputStudentWorld, imageID, dir, depth, inputHP)
 {}
@@ -649,16 +655,16 @@ void EColi::doSomething()
 		{
 			double newXChasingSocrates;
 			double newYChasingSocrates;
-			getPositionInThisDirection(angle, 2, newXChasingSocrates, newYChasingSocrates);
+			getPositionInThisDirection(angle,2, newXChasingSocrates, newYChasingSocrates);
 			if (!(getStudentWorld()->getEuclideanDistance(newXChasingSocrates, newYChasingSocrates, (VIEW_WIDTH / 2), (VIEW_HEIGHT / 2)) > VIEW_DIAMETER) && !(getStudentWorld()->wentOverDirtPile(newXChasingSocrates, newYChasingSocrates)))
 			{
 				setDirection(angle);
 				moveAngle(angle, 2);
+				return;
 			}
 		}
-		return;	//TODO:IS THIS THE RIGHT WAY?
+			//TODO:IS THIS THE RIGHT WAY?
 		
-		//moveAngle(angle, 2)
 	}
 }
 
