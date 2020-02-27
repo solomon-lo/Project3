@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 #include <cmath>
-#include <math.h>
 using namespace std;
 //class ActorBaseClass;
 
@@ -22,7 +21,7 @@ StudentWorld::StudentWorld(string assetPath)
 int StudentWorld::init()
 {
 	//adding pits to the StudentWorld
-	for (int i = 0; i < getLevel(); i++)
+	/*for (int i = 0; i < getLevel(); i++)
 	{
 		int randomPitX = 0;
 		int randomPitY = 0;
@@ -36,7 +35,7 @@ int StudentWorld::init()
 		for (it = ActorsVector.begin(); it != ActorsVector.end(); it++)
 		{
 			double distanceToCenterActor = getEuclideanDistance(randomPitX, randomPitY, (*it)->getX(), (*it)->getY());
-			if ((distanceToCenterActor <= 8 || ((*it)->blocksBacteriumMovement()))) //
+			if ((distanceToCenterActor <= 8)) //|| ((*it)->blocksBacteriumMovement()))
 			{
 				overlappedWithSomething = true;
 				break;
@@ -49,7 +48,7 @@ int StudentWorld::init()
 		}
 		Pit* newPit = new Pit(randomPitX, randomPitY, this);
 		addToActorsVector(newPit);
-	}
+	}*/
 
 
 	//adding food to the StudentWorld
@@ -111,10 +110,10 @@ int StudentWorld::init()
 	ActorsVector.push_back(new Food(80, 80, this));
 	ActorsVector.push_back(new Food(132, 132, this));
 
-	ActorsVector.push_back(new AggressiveSalmonella(128, 128, this));
-	//ActorsVector.push_back(new AggressiveSalmonella(75, 75, this));
+	ActorsVector.push_back(new AggressiveSalmonella(128, 128, this, IID_FLAME));
+	//ActorsVector.push_back(new AggressiveSalmonella(75, 75, this, IID_FLAME));
 
-	//ActorsVector.push_back(new AggressiveSalmonella(100, 100, this));
+	//ActorsVector.push_back(new Salmonella(100, 100, this));
 
 	double flameX = (VIEW_WIDTH / 2) + (128 * cos(160 * 1.0 / 360 * 2 * PI));
 	double flameY = (VIEW_HEIGHT / 2) + (128 * sin(160 * 1.0 / 360 * 2 * PI));
@@ -194,8 +193,8 @@ double StudentWorld::getEuclideanDistance(double baseX, double baseY, double new
 
 double StudentWorld::getDistanceFromSocrates(ActorBaseClass* targetActor)
 {
-	double actorX = targetActor->getX();
-	double actorY = targetActor->getY();
+	int actorX = targetActor->getX();
+	int actorY = targetActor->getY();
 	return getEuclideanDistance(playerObject->getX(), playerObject->getY(), actorX, actorY);
 }
 
@@ -286,11 +285,12 @@ bool StudentWorld::wentOverFood(int centerActorX, int centerActorY)
 	{
 
 		double distanceToCenterActor = getEuclideanDistance(centerActorX, centerActorY, (*it)->getX(), (*it)->getY());
+		cerr << distanceToCenterActor << endl;
 		if (distanceToCenterActor <= SPRITE_RADIUS * 2)
 		{
 			if ((*it)->isEdible() == true)
 			{
-				(*it)->modifyHP(-1);
+				(*it)->modifyHP(-5);
 				(*it)->setAsDead();
 				return true;
 			}

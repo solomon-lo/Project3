@@ -3,7 +3,7 @@
 #include "GameConstants.h"
 #include <iostream>
 #include <cmath>
-#include <math.h>
+#include<math.h>
 using namespace std;
 
 class StudentWorld;
@@ -68,8 +68,10 @@ bool ActorBaseClass::SetAsDeadIfLessThan0HP()
 	return false;
 }
 
-bool ActorBaseClass::isEdible() const
+bool ActorBaseClass::isEdible()
 {
+
+	cerr << "called base class" << endl;
 	return false;
 }
 
@@ -83,9 +85,9 @@ Pit::Pit(double startX, double startY, StudentWorld* inputStudentWorld, int imag
 
 void Pit::doSomething()
 {
-	if ((RegularSalmonellaInventory + AggressiveSalmonellaInventory + EColiInventory) == 0)
+	if (RegularSalmonellaInventory + AggressiveSalmonellaInventory + EColiInventory == 0)
 	{
-		modifyHP(-4);
+		modifyHP(-1);
 		setAsDead();
 	}
 
@@ -94,22 +96,22 @@ void Pit::doSomething()
 	if (randomNumberFromOneToFifty == 1)
 	{
 		bool bacteriaSpawned = false;
+		int chooseBacteriaToSpawn = randInt(1, 3);
 		while (!bacteriaSpawned)
 		{
-			int chooseBacteriaToSpawn = randInt(1, 3);
-			if ((chooseBacteriaToSpawn == 1) && RegularSalmonellaInventory > 0)
+			if ((randomNumberFromOneToFifty == 1) && RegularSalmonellaInventory > 0)
 			{
 				getStudentWorld()->addToActorsVector(new Salmonella(getX(), getY(), getStudentWorld()));
 				RegularSalmonellaInventory--;
 				bacteriaSpawned = true;
 			}
-			if ((chooseBacteriaToSpawn == 2) && AggressiveSalmonellaInventory > 0)
+			if ((randomNumberFromOneToFifty == 2) && AggressiveSalmonellaInventory > 0)
 			{
 				getStudentWorld()->addToActorsVector(new AggressiveSalmonella(getX(), getY(), getStudentWorld()));
 				AggressiveSalmonellaInventory--;
 				bacteriaSpawned = true;
 			}
-			if ((chooseBacteriaToSpawn == 3) && EColiInventory > 0)
+			if ((randomNumberFromOneToFifty == 3) && EColiInventory > 0)
 			{
 				getStudentWorld()->addToActorsVector(new EColi(getX(), getY(), getStudentWorld()));
 				EColiInventory--;
@@ -284,6 +286,7 @@ SprayProjectile::SprayProjectile(double startX, double startY, StudentWorld* inp
 
 void SprayProjectile::doSomething()
 {
+	//TODO:CHECK FOR OVERLAP
 	SetAsDeadIfLessThan0HP();
 	bool temp = getStudentWorld()->wentOverSprayableObject(getX(), getY());
 	if (temp == true)
@@ -308,6 +311,7 @@ FlameProjectile::FlameProjectile(double startX, double startY, StudentWorld* inp
 
 void FlameProjectile::doSomething()
 {
+	//TODO:CHECK FOR OVERLAP
 	SetAsDeadIfLessThan0HP();
 	bool temp = getStudentWorld()->wentOverSprayableObject(getX(), getY());
 	if (temp == true)
@@ -345,10 +349,10 @@ bool Food::flameWillHarm()
 
 bool Food::isEdible()
 {
-	setAsDead();
-	modifyHP(-5);
+	//modifyHP(-6);
+	//setAsDead();
+	cerr << "called actual derived" << endl;
 	return true;
-	cerr << "Food destroyed " << endl;
 }
 GoodieBaseClass::GoodieBaseClass(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth)
 	:ActorBaseClass(imageID, startX, startY, dir, depth, inputStudentWorld)
@@ -543,7 +547,7 @@ int Bacteria::getFoodEaten()
 
 void Bacteria::checkIfWentOverFoodAndIncrementIfSo()
 {
-	if (getStudentWorld()->wentOverFood(getX(), getY()) == true)
+	if (getStudentWorld()->wentOverFood(getX(), getY()))
 	{
 		cerr << "finally ate food" << endl;
 		modifyFoodEaten(+1);
@@ -589,7 +593,7 @@ void Bacteria::lookAndGoAfterFoodWithin128()
 {
 	double newFoodX;
 	double newFoodY;
-	if (getStudentWorld()->findFoodWithin128(getX(), getY(), newFoodX, newFoodY) == true)
+	if (getStudentWorld()->findFoodWithin128(getX(), getY(), newFoodX, newFoodY))
 	{
 		const double PI = 4 * atan(1);
 		double angle = (180.00000 / PI) * atan2(newFoodY - getY(), newFoodX - getX());
@@ -629,13 +633,13 @@ void AggressiveSalmonella::doSomething()
 	bool hasDividedThisTick = false;
 	double tempXDistance;
 	double tempYDistance;
-	
-	if (getStudentWorld()->getDistanceFromSocrates(this) <= 72) 
+
+	if (getStudentWorld()->getDistanceFromSocrates(this) <= 72)
 	{
 
 		double tempSocratesX = 1;
 		double tempSocratesY = 1;
-		if(getStudentWorld()->findSocratesWithinDistance(getX(), getY(), tempSocratesX, tempSocratesY, 72))
+		if (getStudentWorld()->findSocratesWithinDistance(getX(), getY(), tempSocratesX, tempSocratesY, 72))
 		{
 			const double PI = 4 * atan(1);
 			double angle = (180.00000 / PI) * atan2(tempSocratesX - getY(), tempSocratesY - getX());
@@ -664,9 +668,9 @@ void AggressiveSalmonella::doSomething()
 		hasDividedThisTick = true;
 	}
 
-	
+
 	//step 5
-	if (!overlappedWithSocratesThisTick && !hasDividedThisTick)
+	if (true)//TODO: !overlappedWithSocratesThisTick &&
 	{
 		checkIfWentOverFoodAndIncrementIfSo();
 	}
@@ -688,7 +692,8 @@ void AggressiveSalmonella::doSomething()
 
 Salmonella::Salmonella(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth, int inputHP)
 	:Bacteria(startX, startY, inputStudentWorld, imageID, dir, 0, 4)
-{}
+{
+}
 void Salmonella::doSomething()
 {
 	SetAsDeadIfLessThan0HP();
@@ -709,12 +714,14 @@ void Salmonella::doSomething()
 		}
 		hasDividedThisTick = true;
 	}
-	checkIfWentOverFoodAndIncrementIfSo();
-	if (!hasDividedThisTick && !overlappedWithSocratesThisTick)
+
+	if (true)//TODO: && !overlappedWithSocratesThisTick
 	{
 
-		
+		checkIfWentOverFoodAndIncrementIfSo();
 	}
+
+
 	double possibleFoodX;
 	double possibleFoodY;
 	if (getMovementPlanDistance() > 0)
@@ -724,7 +731,6 @@ void Salmonella::doSomething()
 	else
 	{
 		lookAndGoAfterFoodWithin128();
-		cerr << "going after closest food" << endl;
 	}
 }
 
@@ -754,11 +760,10 @@ void EColi::doSomething()
 		hasDividedThisTick = true;
 	}
 
-	checkIfWentOverFoodAndIncrementIfSo();
-	if (!hasDividedThisTick && !overlappedWithSocratesThisTick)
+	if (true)//TODO: && !overlappedWithSocratesThisTick
 	{
 
-		//move checkIfWentOverFood and put inside
+		checkIfWentOverFoodAndIncrementIfSo();
 	}
 
 	//step 5
@@ -769,7 +774,7 @@ void EColi::doSomething()
 	{
 		const double PI = 4 * atan(1);
 		double angle = (180.00000 / PI) * atan2(tempSocratesY - getY(), tempSocratesX - getX());
-		
+
 		double newXChasingSocrates;
 		double newYChasingSocrates;
 		getPositionInThisDirection(angle, 2, newXChasingSocrates, newYChasingSocrates);
@@ -779,7 +784,7 @@ void EColi::doSomething()
 			moveAngle(angle, 2);
 			return;
 		}
-		
+		//TODO:IS THIS THE RIGHT WAY?
+
 	}
 }
-

@@ -1,37 +1,37 @@
 ﻿  Actor.cpp
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(164,15): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(288,69): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(288,61): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(312,69): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(312,61): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(371,27): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(546,50): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(546,42): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(574,162): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(574,155): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(599,30): warning C4244: 'argument': conversion from 'double' to 'Direction', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(600,201): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(600,181): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(608,17): warning C4244: 'argument': conversion from 'double' to 'Direction', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(644,31): warning C4244: 'argument': conversion from 'double' to 'Direction', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(645,216): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(645,192): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(647,18): warning C4244: 'argument': conversion from 'double' to 'Direction', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(648,15): warning C4244: 'argument': conversion from 'double' to 'Direction', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(659,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(660,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(631,9): warning C4101: 'tempYDistance': unreferenced local variable
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(630,9): warning C4101: 'tempXDistance': unreferenced local variable
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(705,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(706,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(719,9): warning C4101: 'possibleFoodY': unreferenced local variable
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(718,9): warning C4101: 'possibleFoodX': unreferenced local variable
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(749,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(750,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(775,30): warning C4244: 'argument': conversion from 'double' to 'Direction', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(776,207): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(776,186): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(778,17): warning C4244: 'argument': conversion from 'double' to 'Direction', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(779,14): warning C4244: 'argument': conversion from 'double' to 'Direction', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(564): warning C4715: 'Bacteria::checkIfOverlappedWithSocratesAndModifySocratesHP': not all control paths return a value
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(166,15): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(291,69): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(291,61): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(316,69): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(316,61): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(375,27): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(550,50): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(550,42): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(578,162): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(578,155): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(603,30): warning C4244: 'argument': conversion from 'double' to 'Direction', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(604,201): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(604,181): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(612,17): warning C4244: 'argument': conversion from 'double' to 'Direction', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(648,31): warning C4244: 'argument': conversion from 'double' to 'Direction', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(649,216): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(649,192): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(651,18): warning C4244: 'argument': conversion from 'double' to 'Direction', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(652,15): warning C4244: 'argument': conversion from 'double' to 'Direction', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(663,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(664,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(635,9): warning C4101: 'tempYDistance': unreferenced local variable
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(634,9): warning C4101: 'tempXDistance': unreferenced local variable
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(710,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(711,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(726,9): warning C4101: 'possibleFoodY': unreferenced local variable
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(725,9): warning C4101: 'possibleFoodX': unreferenced local variable
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(755,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(756,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(780,30): warning C4244: 'argument': conversion from 'double' to 'Direction', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(781,207): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(781,186): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(783,17): warning C4244: 'argument': conversion from 'double' to 'Direction', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(784,14): warning C4244: 'argument': conversion from 'double' to 'Direction', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(568): warning C4715: 'Bacteria::checkIfOverlappedWithSocratesAndModifySocratesHP': not all control paths return a value
   Kontagion.vcxproj -> C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Debug\Kontagion.exe
