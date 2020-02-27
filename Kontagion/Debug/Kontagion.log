@@ -1,9 +1,9 @@
 ﻿  Actor.cpp
 C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(164,15): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(289,69): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(289,61): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(314,69): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(314,61): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(288,69): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(288,61): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(312,69): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(312,61): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
 C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(371,27): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
 C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(546,50): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
 C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(546,42): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
@@ -24,10 +24,10 @@ C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(631,9): war
 C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(630,9): warning C4101: 'tempXDistance': unreferenced local variable
 C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(705,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
 C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(706,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(721,9): warning C4101: 'possibleFoodY': unreferenced local variable
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(720,9): warning C4101: 'possibleFoodX': unreferenced local variable
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(719,9): warning C4101: 'possibleFoodY': unreferenced local variable
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(718,9): warning C4101: 'possibleFoodX': unreferenced local variable
+C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(749,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
 C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(750,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(751,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
 C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(775,30): warning C4244: 'argument': conversion from 'double' to 'Direction', possible loss of data
 C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(776,207): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
 C:\Users\Solomon Lo\Desktop\cs32_project3_draft1\Kontagion\Actor.cpp(776,186): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data

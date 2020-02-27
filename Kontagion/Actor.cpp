@@ -284,7 +284,6 @@ SprayProjectile::SprayProjectile(double startX, double startY, StudentWorld* inp
 
 void SprayProjectile::doSomething()
 {
-	//TODO:CHECK FOR OVERLAP
 	SetAsDeadIfLessThan0HP();
 	bool temp = getStudentWorld()->wentOverSprayableObject(getX(), getY());
 	if (temp == true)
@@ -309,7 +308,6 @@ FlameProjectile::FlameProjectile(double startX, double startY, StudentWorld* inp
 
 void FlameProjectile::doSomething()
 {
-	//TODO:CHECK FOR OVERLAP
 	SetAsDeadIfLessThan0HP();
 	bool temp = getStudentWorld()->wentOverSprayableObject(getX(), getY());
 	if (temp == true)
@@ -348,7 +346,9 @@ bool Food::flameWillHarm()
 bool Food::isEdible()
 {
 	setAsDead();
+	modifyHP(-5);
 	return true;
+	cerr << "Food destroyed " << endl;
 }
 GoodieBaseClass::GoodieBaseClass(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth)
 	:ActorBaseClass(imageID, startX, startY, dir, depth, inputStudentWorld)
@@ -543,7 +543,7 @@ int Bacteria::getFoodEaten()
 
 void Bacteria::checkIfWentOverFoodAndIncrementIfSo()
 {
-	if (getStudentWorld()->wentOverFood(getX(), getY()))
+	if (getStudentWorld()->wentOverFood(getX(), getY()) == true)
 	{
 		cerr << "finally ate food" << endl;
 		modifyFoodEaten(+1);
@@ -589,7 +589,7 @@ void Bacteria::lookAndGoAfterFoodWithin128()
 {
 	double newFoodX;
 	double newFoodY;
-	if (getStudentWorld()->findFoodWithin128(getX(), getY(), newFoodX, newFoodY))
+	if (getStudentWorld()->findFoodWithin128(getX(), getY(), newFoodX, newFoodY) == true)
 	{
 		const double PI = 4 * atan(1);
 		double angle = (180.00000 / PI) * atan2(newFoodY - getY(), newFoodX - getX());
@@ -664,7 +664,7 @@ void AggressiveSalmonella::doSomething()
 		hasDividedThisTick = true;
 	}
 
-
+	
 	//step 5
 	if (!overlappedWithSocratesThisTick && !hasDividedThisTick)
 	{
@@ -709,14 +709,12 @@ void Salmonella::doSomething()
 		}
 		hasDividedThisTick = true;
 	}
-
+	checkIfWentOverFoodAndIncrementIfSo();
 	if (!hasDividedThisTick && !overlappedWithSocratesThisTick)
 	{
 
-		checkIfWentOverFoodAndIncrementIfSo();
+		
 	}
-
-
 	double possibleFoodX;
 	double possibleFoodY;
 	if (getMovementPlanDistance() > 0)
@@ -726,6 +724,7 @@ void Salmonella::doSomething()
 	else
 	{
 		lookAndGoAfterFoodWithin128();
+		cerr << "going after closest food" << endl;
 	}
 }
 
@@ -755,10 +754,11 @@ void EColi::doSomething()
 		hasDividedThisTick = true;
 	}
 
+	checkIfWentOverFoodAndIncrementIfSo();
 	if (!hasDividedThisTick && !overlappedWithSocratesThisTick)
 	{
 
-		checkIfWentOverFoodAndIncrementIfSo();
+		//move checkIfWentOverFood and put inside
 	}
 
 	//step 5
@@ -779,7 +779,6 @@ void EColi::doSomething()
 			moveAngle(angle, 2);
 			return;
 		}
-			//TODO:IS THIS THE RIGHT WAY?
 		
 	}
 }

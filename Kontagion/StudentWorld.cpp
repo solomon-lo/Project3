@@ -36,7 +36,7 @@ int StudentWorld::init()
 		for (it = ActorsVector.begin(); it != ActorsVector.end(); it++)
 		{
 			double distanceToCenterActor = getEuclideanDistance(randomPitX, randomPitY, (*it)->getX(), (*it)->getY());
-			if ((distanceToCenterActor <= 8)) //|| ((*it)->blocksBacteriumMovement()))
+			if ((distanceToCenterActor <= 8 || ((*it)->blocksBacteriumMovement()))) //
 			{
 				overlappedWithSomething = true;
 				break;
@@ -83,20 +83,20 @@ int StudentWorld::init()
 	}
 
 	//init dirtPiles
-	int numOfDirtPiles = max(180 - 20 * getLevel(), 20);
-	for (int i = 0; i < numOfDirtPiles; i++)
-	{
-		int randomX = 0;
-		int randomY = 0;
-		while (sqrt((randomX - (VIEW_WIDTH / 2)) * (randomX - (VIEW_WIDTH / 2)) + (randomY - (VIEW_HEIGHT / 2)) * (randomY - (VIEW_HEIGHT / 2))) > 120)
-		{
+	//int numOfDirtPiles = max(180 - 20 * getLevel(), 20);
+	//for (int i = 0; i < numOfDirtPiles; i++)
+	//{
+	//	int randomX = 0;
+	//	int randomY = 0;
+	//	while (sqrt((randomX - (VIEW_WIDTH / 2)) * (randomX - (VIEW_WIDTH / 2)) + (randomY - (VIEW_HEIGHT / 2)) * (randomY - (VIEW_HEIGHT / 2))) > 120)
+	//	{
 
-			randomX = randInt((VIEW_WIDTH / 2) - 120, (VIEW_WIDTH / 2) + 120);
-			randomY = randInt((VIEW_HEIGHT / 2) - 120, (VIEW_HEIGHT / 2) + 120);
-		}
-		DirtPile* newDirtPile = new DirtPile(randomX, randomY, this);
-		ActorsVector.push_back(newDirtPile);
-	}
+	//		randomX = randInt((VIEW_WIDTH / 2) - 120, (VIEW_WIDTH / 2) + 120);
+	//		randomY = randInt((VIEW_HEIGHT / 2) - 120, (VIEW_HEIGHT / 2) + 120);
+	//	}
+	//	DirtPile* newDirtPile = new DirtPile(randomX, randomY, this);
+	//	ActorsVector.push_back(newDirtPile);
+	//}
 
 	addToActorsVector(new EColi(120, 120, this));
 	//init a goodie(MUST BE REMOVED, THIS IS FOR TESTING ONLY)
@@ -286,7 +286,7 @@ bool StudentWorld::wentOverFood(int centerActorX, int centerActorY)
 	{
 
 		double distanceToCenterActor = getEuclideanDistance(centerActorX, centerActorY, (*it)->getX(), (*it)->getY());
-		if (distanceToCenterActor <= SPRITE_RADIUS)
+		if (distanceToCenterActor <= SPRITE_RADIUS * 2)
 		{
 			if ((*it)->isEdible() == true)
 			{
