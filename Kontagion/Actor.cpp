@@ -542,7 +542,7 @@ void Salmonella::doSomething()
 		hasDividedThisTick = true;
 	}
 
-	if (!hasDividedThisTick)
+	if (!hasDividedThisTick && !overlappedWithSocratesThisTick)
 	{
 
 		checkIfWentOverFoodAndIncrementIfSo();
@@ -630,10 +630,35 @@ void EColi::doSomething()
 		hasDividedThisTick = true;
 	}
 
-	if (!hasDividedThisTick)
+	if (!hasDividedThisTick && !overlappedWithSocratesThisTick)
 	{
 
 		checkIfWentOverFoodAndIncrementIfSo();
+	}
+
+	//step 5
+
+	double tempSocratesX;
+	double tempSocratesY;
+	if (getStudentWorld()->findSocratesWithin256(getX(), getY(), tempSocratesX, tempSocratesY))
+	{
+		const double PI = 4 * atan(1);
+		double angle = (180.00000 / PI) * atan2(tempSocratesY - getY(), tempSocratesX - getX());
+		
+		for (int i = 0; i < 10; i++)
+		{
+			double newXChasingSocrates;
+			double newYChasingSocrates;
+			getPositionInThisDirection(angle, 2, newXChasingSocrates, newYChasingSocrates);
+			if (!(getStudentWorld()->getEuclideanDistance(newXChasingSocrates, newYChasingSocrates, (VIEW_WIDTH / 2), (VIEW_HEIGHT / 2)) > VIEW_DIAMETER) && !(getStudentWorld()->wentOverDirtPile(newXChasingSocrates, newYChasingSocrates)))
+			{
+				setDirection(angle);
+				moveAngle(angle, 2);
+			}
+		}
+		return;	//TODO:IS THIS THE RIGHT WAY?
+		
+		//moveAngle(angle, 2)
 	}
 }
 

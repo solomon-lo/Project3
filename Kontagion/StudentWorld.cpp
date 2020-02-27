@@ -307,10 +307,23 @@ bool StudentWorld::findFoodWithin128(double bacteriaX, double bacteriaY, double&
 		foodY = currentSmallestY;
 		return true;
 	}
-
-
 }
 
+bool StudentWorld::findSocratesWithin256(double bacteriaX, double bacteriaY, double& SocratesX, double& SocratesY)
+{
+	double currentSocratesX = playerObject->getX();
+	double currentSocratesY = playerObject->getY();
+	if (getEuclideanDistance((bacteriaX, bacteriaY, currentSocratesX, currentSocratesY) <= 256))
+	{
+		SocratesX = currentSocratesX;
+		SocratesY = currentSocratesY;
+		return true;
+	}
+	SocratesX = 1;
+	SocratesY = 1;
+	return false;
+
+}
 
 void StudentWorld::cleanUp()
 {

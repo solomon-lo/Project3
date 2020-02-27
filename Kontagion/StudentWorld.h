@@ -44,6 +44,7 @@ public:
 	void flameThrowerGoodieEffect();
 	void fungusEffect();
 	bool findFoodWithin128(double bacteriaX, double bacteriaY, double& foodX, double& foodY);
+	bool findSocratesWithin256(double bacteriaX, double bacteriaY, double& SocratesX, double& SocratesY);
 
 private:
 	Socrates* playerObject;
