@@ -518,7 +518,50 @@ AggressiveSalmonella::AggressiveSalmonella(double startX, double startY, Student
 
 void AggressiveSalmonella::doSomething()
 {
-	
+	SetAsDeadIfLessThan0HP();
+
+	bool chasedAfterSocrates = false;
+	bool overlappedWithSocratesThisTick = false;
+	bool hasDividedThisTick = false;
+
+	if (getStudentWorld()->getDistanceFromSocrates(this) <= 72)
+	{
+		chasedAfterSocrates = true;
+		double tempSocratesX;
+		double tempSocratesY;
+		if(getStudentWorld()->findSocratesWithinDistance(getX(), getY(), tempSocratesX, tempSocratesY, 72))
+		{
+			const double PI = 4 * atan(1);
+			double angle = (180.00000 / PI) * atan2(tempSocratesX - getY(), tempSocratesY - getX());
+			double newXAfterSocratesFound;
+			double newYAfterSocratesFound;
+			getPositionInThisDirection(angle, 3, newXAfterSocratesFound, newYAfterSocratesFound);
+			if ((getStudentWorld()->getEuclideanDistance(newXAfterSocratesFound, newYAfterSocratesFound, (VIEW_WIDTH / 2), (VIEW_HEIGHT / 2)) < VIEW_DIAMETER) && !(getStudentWorld()->wentOverDirtPile(newXAfterSocratesFound, newYAfterSocratesFound)))
+			{
+				setDirection(angle);
+				moveAngle(angle, 3);
+			}
+		}
+	}
+
+	overlappedWithSocratesThisTick = checkIfOverlappedWithSocratesAndModifySocratesHP(-2);
+
+	if (!overlappedWithSocratesThisTick)
+	{
+		if (getFoodEaten() >= 3)
+		{
+			int newX = newXAfter3Food(getX());
+			int newY = newYAfter3Food(getY());
+			getStudentWorld()->addToActorsVector(new AggressiveSalmonella(newX, newY, getStudentWorld()));
+			modifyFoodEaten(-1 * getFoodEaten());
+		}
+		hasDividedThisTick = true;
+	}
+
+	if (!overlappedWithSocratesThisTick && !hasDividedThisTick)
+	{
+		checkIfWentOverFoodAndIncrementIfSo();
+	}
 }
 
 Salmonella::Salmonella(double startX, double startY, StudentWorld* inputStudentWorld, int imageID, Direction dir, int depth, int inputHP)
@@ -646,22 +689,19 @@ void EColi::doSomething()
 
 	double tempSocratesX;
 	double tempSocratesY;
-	if (getStudentWorld()->findSocratesWithin256(getX(), getY(), tempSocratesX, tempSocratesY))
+	if (getStudentWorld()->findSocratesWithinDistance(getX(), getY(), tempSocratesX, tempSocratesY, 256))
 	{
 		const double PI = 4 * atan(1);
 		double angle = (180.00000 / PI) * atan2(tempSocratesY - getY(), tempSocratesX - getX());
 		
-		for (int i = 0; i < 10; i++)
+		double newXChasingSocrates;
+		double newYChasingSocrates;
+		getPositionInThisDirection(angle, 2, newXChasingSocrates, newYChasingSocrates);
+		if (!(getStudentWorld()->getEuclideanDistance(newXChasingSocrates, newYChasingSocrates, (VIEW_WIDTH / 2), (VIEW_HEIGHT / 2)) > VIEW_DIAMETER) && !(getStudentWorld()->wentOverDirtPile(newXChasingSocrates, newYChasingSocrates)))
 		{
-			double newXChasingSocrates;
-			double newYChasingSocrates;
-			getPositionInThisDirection(angle,2, newXChasingSocrates, newYChasingSocrates);
-			if (!(getStudentWorld()->getEuclideanDistance(newXChasingSocrates, newYChasingSocrates, (VIEW_WIDTH / 2), (VIEW_HEIGHT / 2)) > VIEW_DIAMETER) && !(getStudentWorld()->wentOverDirtPile(newXChasingSocrates, newYChasingSocrates)))
-			{
-				setDirection(angle);
-				moveAngle(angle, 2);
-				return;
-			}
+			setDirection(angle);
+			moveAngle(angle, 2);
+			return;
 		}
 			//TODO:IS THIS THE RIGHT WAY?
 		

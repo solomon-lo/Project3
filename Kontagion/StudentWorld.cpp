@@ -260,6 +260,7 @@ bool StudentWorld::wentOverFood(int centerActorX, int centerActorY)
 			if ((*it)->isEdible() == true)
 			{
 				(*it)->modifyHP(-1);
+				return true;
 			}
 		}
 	}
@@ -309,11 +310,11 @@ bool StudentWorld::findFoodWithin128(double bacteriaX, double bacteriaY, double&
 	}
 }
 
-bool StudentWorld::findSocratesWithin256(double bacteriaX, double bacteriaY, double& SocratesX, double& SocratesY)
+bool StudentWorld::findSocratesWithinDistance(double bacteriaX, double bacteriaY, double& SocratesX, double& SocratesY, int inputDistance)
 {
 	double currentSocratesX = playerObject->getX();
 	double currentSocratesY = playerObject->getY();
-	if (getEuclideanDistance(bacteriaX, bacteriaY, currentSocratesX, currentSocratesY) <= 256)
+	if (getEuclideanDistance(bacteriaX, bacteriaY, currentSocratesX, currentSocratesY) <= inputDistance)
 	{
 		SocratesX = currentSocratesX;
 		SocratesY = currentSocratesY;
